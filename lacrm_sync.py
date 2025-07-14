@@ -45,6 +45,29 @@ LOG_DIR = "logs"
 PROFITABILITY_CONCERN = "Profitability Concern"
 REVENUE_CONCERN = "Revenue Concern"
 
+# Pipeline creation constants
+PIPELINE_NAME = "Potensielle kunder"
+DEFAULT_PIPELINE_STATUS = "Foreslått"
+
+# Pipeline recommendation mapping
+PIPELINE_SUGGESTIONS = {
+    "Web Design / Security": "Webdesign / Nettprofil",
+    "SSL/Security Issues": "Sikkerhetsoppgradering", 
+    "Email Branding": "Profesjonell e-post / branding",
+    "Automation First Entry": "Automatisering / første løsning",
+    "Startup Onboarding Package": "Startup-pakke",
+    "Booking System": "Bestilling / kalender / tilstedeværelse",
+    "Hosting Issues": "Hosting / vedlikehold",
+    "Business Restructuring": "Omprofilering / nye marketer",
+    "SEO + Reviews": "SEO + reviews + nettpakke",
+    "Digital Modernization": "Modernisering",
+    "Customer Feedback System": "Kundetilbakemeldingssystem",
+    "Visibility Boost": "Synlighetspakke (AI, SEO, bilder)",
+    "CRM Integration": "Skreddersydd CRM / integrasjon",
+    "Email Marketing": "E-postmarkedsføring / nyhetsbrev",
+    "Fiken Integration Services": "Regnskapsintegrasjon / Fiken"
+}
+
 # --- Logging Setup ---
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
@@ -452,144 +475,294 @@ def get_lacrm_contacts(
         return None
 
 
-def update_lacrm_contact(
-    contact_id: str, 
-    fields_to_update: Dict[str, Any], 
-    config: configparser.ConfigParser, 
-    dry_run: bool = False
-) -> bool:
-    """Updates a contact in LACRM with a dictionary of custom fields."""
-    if not fields_to_update:
-        logging.info(f"No fields to update for contact {contact_id}.")
-        return True
-
-    logging.info(f"Updating contact {contact_id} with {len(fields_to_update)} fields.")
-    if dry_run:
-        # Don't log sensitive data in dry-run mode
-        logging.warning(
-            f"[DRY RUN] Would have updated contact {contact_id} with {len(fields_to_update)} fields."
-        )
-        return True
-
+def get_or_create_pipeline(config: configparser.ConfigParser) -> Optional[str]:
+    """Gets or creates the 'Potensielle kunder' pipeline and returns its ID."""
+    logging.info(f"Getting or creating pipeline: {PIPELINE_NAME}")
+    
+    # First, try to get existing pipelines
     params = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
-        "Function": "EditContact",
-        "Parameters": json.dumps({
-            "ContactId": contact_id,
-            "CustomFields": fields_to_update
-        })
+        "Function": "GetPipelines",
     }
+    
     try:
         response = requests.post(LACRM_API_URL, params=params, timeout=15)
         response.raise_for_status()
         result = response.json()
+        
         if result.get('Success'):
-            logging.info(f"Successfully updated contact {contact_id}.")
+            pipelines = result.get('Result', [])
+            # Look for existing pipeline
+            for pipeline in pipelines:
+                if pipeline.get('Name') == PIPELINE_NAME:
+                    pipeline_id = pipeline.get('PipelineId')
+                    logging.info(f"Found existing pipeline '{PIPELINE_NAME}' with ID: {pipeline_id}")
+                    return pipeline_id
+            
+            # If not found, create new pipeline
+            create_params = {
+                "UserCode": config['LACRM']['UserCode'],
+                "APIToken": config['LACRM']['APIToken'],
+                "Function": "CreatePipeline",
+                "Parameters": json.dumps({
+                    "Name": PIPELINE_NAME,
+                    "StatusNames": [DEFAULT_PIPELINE_STATUS, "Under vurdering", "Kontaktet", "Proposal sendt", "Lukket vunnet", "Lukket tapt"]
+                })
+            }
+            
+            create_response = requests.post(LACRM_API_URL, params=create_params, timeout=15)
+            create_response.raise_for_status()
+            create_result = create_response.json()
+            
+            if create_result.get('Success'):
+                pipeline_id = create_result.get('Result', {}).get('PipelineId')
+                logging.info(f"Created new pipeline '{PIPELINE_NAME}' with ID: {pipeline_id}")
+                return pipeline_id
+            else:
+                logging.error(f"Failed to create pipeline: {create_result.get('Result')}")
+                return None
+        else:
+            logging.error(f"Failed to get pipelines: {result.get('Result')}")
+            return None
+            
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error managing pipeline: {e}")
+        return None
+
+
+def create_pipeline_item(
+    config: configparser.ConfigParser,
+    pipeline_id: str,
+    company_name: str,
+    orgnr: str,
+    suggested_service: str,
+    phone: Optional[str] = None,
+    email: Optional[str] = None,
+    ai_comment: Optional[str] = None
+) -> bool:
+    """Creates a new item in the Potensielle kunder pipeline."""
+    logging.info(f"Creating pipeline item for {company_name} ({orgnr})")
+    
+    # Prepare the pipeline item data
+    item_data = {
+        "PipelineId": pipeline_id,
+        "Name": f"{company_name} - {suggested_service}",
+        "StatusName": DEFAULT_PIPELINE_STATUS,
+        "CustomFields": {
+            "Company": company_name,
+            "OrgNr": orgnr,
+            "Suggested": suggested_service,
+            "Phone": phone or "",
+            "Email": email or "",
+            "Comment": ai_comment or f"Automatisk forslag basert på analyse av {company_name}. Anbefalt tjeneste: {suggested_service}"
+        }
+    }
+    
+    params = {
+        "UserCode": config['LACRM']['UserCode'],
+        "APIToken": config['LACRM']['APIToken'],
+        "Function": "CreatePipelineItem",
+        "Parameters": json.dumps(item_data)
+    }
+    
+    try:
+        response = requests.post(LACRM_API_URL, params=params, timeout=15)
+        response.raise_for_status()
+        result = response.json()
+        
+        if result.get('Success'):
+            item_id = result.get('Result', {}).get('PipelineItemId')
+            logging.info(f"Successfully created pipeline item for {company_name} with ID: {item_id}")
             return True
         else:
-            logging.error(
-                f"Failed to update contact {contact_id}: "
-                f"{result.get('Result')}"
-            )
+            logging.error(f"Failed to create pipeline item for {company_name}: {result.get('Result')}")
             return False
+            
     except requests.exceptions.RequestException as e:
-        logging.error(f"Error updating contact {contact_id}: {e}")
+        logging.error(f"Error creating pipeline item for {company_name}: {e}")
         return False
 
 
-def enrich_with_urls(
-    orgnr: str, phone_number: Optional[str] = None
-) -> Dict[str, str]:
-    """Generates relevant business URLs."""
-    urls = {
-        "brreg": f"https://w2.brreg.no/enhet/sok/detalj.jsp?orgnr={orgnr}",
-        "proff": PROFF_URL.format(orgnr=orgnr),
-        "gulesider": GULESIDER_URL.format(orgnr=orgnr)
-    }
-    if phone_number:
-        urls["1881"] = f"https://www.1881.no/?query={phone_number}"
+def generate_ai_sales_comment(enriched_data: Dict[str, Any], suggested_service: str) -> str:
+    """Generates an AI-powered sales approach comment based on company data."""
+    if not client:
+        return f"Anbefalt tjeneste: {suggested_service} basert på automatisk analyse."
+    
+    company_name = enriched_data.get('navn', 'Ukjent selskap')
+    industry = enriched_data.get('naeringskode1', {}).get('beskrivelse', 'Ukjent bransje')
+    employees = enriched_data.get('antallAnsatte', 0)
+    website = enriched_data.get('hjemmeside', 'Ingen nettside')
+    
+    # Build context for AI
+    context = f"""
+    Selskap: {company_name}
+    Bransje: {industry}
+    Antall ansatte: {employees}
+    Nettside: {website}
+    Anbefalt tjeneste: {suggested_service}
+    """
+    
+    prompt = f"""Du er en erfaren salgsrådgiver. Basert på følgende informasjon om et norsk selskap, skriv en kort og profesjonell tilnærmingskommentar (maks 150 ord) som forklarer:
+1. Hvorfor denne tjenesten er relevant for dem
+2. Hvilke konkrete fordeler de kan få
+3. En naturlig måte å ta kontakt på
+
+Informasjon om selskapet:
+{context}
+
+Skriv svaret på norsk og hold det konkret og salgsorientert."""
+
+    try:
+        ai_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "Du er en profesjonell salgsrådgiver som skriver korte, effektive tilnærmingskommentarer."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=200,
+            temperature=0.7,
+        )
+        
+        comment = ai_response.choices[0].message.content
+        return comment.strip()
+        
+    except Exception as e:
+        logging.error(f"AI comment generation failed: {e}")
+        return f"Anbefalt tjeneste: {suggested_service}. Selskapet kan dra nytte av denne tjenesten basert på vår analyse av deres digitale tilstedeværelse og forretningsdata."
+
+
+def enrich_with_urls(orgnr: str) -> Dict[str, str]:
+    """
+    Fetches various website URLs for a company from different sources.
+    """
+    urls = {}
+    
+    # Try to get additional URLs from Gulesider.no
+    try:
+        gulesider_url = GULESIDER_URL.format(orgnr=orgnr)
+        response = requests.get(gulesider_url, timeout=10)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            # Look for website links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if href.startswith('http') and orgnr not in href:
+                    urls['gulesider_website'] = href
+                    break
+    except Exception as e:
+        logging.warning(f"Could not fetch URLs from Gulesider for {orgnr}: {e}")
+        
     return urls
 
 
-def _extract_proff_key_figures(soup: BeautifulSoup) -> Dict[str, str]:
-    """Extracts key financial figures from a Proff.no page soup."""
-    key_figures: Dict[str, str] = {}
-    key_figures_table = soup.find('table', class_='key-figures-table')
-    if not isinstance(key_figures_table, Tag):
-        return key_figures
-
-    for row in key_figures_table.find_all('tr'):
-        if not isinstance(row, Tag):
-            continue
-
-        cells = row.find_all('td')
-        if len(cells) != 2:
-            continue
-
-        key_cell, value_cell = cells[0], cells[1]
-        if not (key_cell and value_cell):
-            continue
-
-        key = key_cell.text.strip()
-        value = value_cell.text.strip()
-        if key and value:
-            key_figures[key] = value
-
-    return key_figures
-
-
 def scrape_proff(orgnr: str) -> Optional[Dict[str, Any]]:
-    """Scrapes Proff.no for additional company details."""
-    if not validate_orgnr(orgnr):
-        logging.error(f"Invalid orgnr format: {orgnr}")
-        return None
-        
-    logging.info(f"Scraping Proff.no for orgnr {orgnr}.")
-    proff_url = PROFF_URL.format(orgnr=orgnr)
-    headers = {
-        'User-Agent': (
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-            'AppleWebKit/537.36 (KHTML, like Gecko) '
-            'Chrome/58.0.3029.110 Safari/537.3'
-        )
-    }
-
+    """
+    Scrapes key financial and company data from Proff.no.
+    """
     try:
-        response = requests.get(proff_url, timeout=10, headers=headers)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.content, 'lxml')
-
-        proff_data: Dict[str, Any] = {}
-
-        name_tag = soup.find('h1')
-        if name_tag:
-            proff_data['company_name'] = name_tag.text.strip()
-
-        key_figures = _extract_proff_key_figures(soup)
-        proff_data['key_figures'] = (
-            key_figures if key_figures
-            else "No key figures table found with current selectors."
-        )
-
-        logging.info(f"Successfully scraped data from Proff.no for {orgnr}.")
+        url = PROFF_URL.format(orgnr=orgnr)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(url, headers=headers, timeout=15)
+        if response.status_code != 200:
+            logging.warning(f"Proff.no returned status {response.status_code} for {orgnr}")
+            return None
+            
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        proff_data = {
+            'url': url,
+            'key_figures': 'No key figures available',
+            'company_description': '',
+            'contact_info': {}
+        }
+        
+        # Try to extract key figures
+        key_figures_section = soup.find('div', class_='key-figures') or soup.find('table', class_='table-key-figures')
+        if key_figures_section:
+            figures = {}
+            for row in key_figures_section.find_all('tr'):
+                cells = row.find_all(['td', 'th'])
+                if len(cells) >= 2:
+                    key = cells[0].get_text(strip=True)
+                    value = cells[1].get_text(strip=True)
+                    if key and value:
+                        figures[key] = value
+            if figures:
+                proff_data['key_figures'] = figures
+        
+        # Try to extract company description
+        description_section = soup.find('div', class_='company-description') or soup.find('p', class_='description')
+        if description_section:
+            proff_data['company_description'] = description_section.get_text(strip=True)
+        
+        # Try to extract contact information
+        contact_section = soup.find('div', class_='contact-info')
+        if contact_section:
+            contact_info = {}
+            for item in contact_section.find_all(['div', 'p', 'span']):
+                text = item.get_text(strip=True)
+                if '@' in text:
+                    contact_info['email'] = text
+                elif text.startswith('+') or text.replace(' ', '').isdigit():
+                    contact_info['phone'] = text
+            proff_data['contact_info'] = contact_info
+        
+        logging.info(f"Successfully scraped Proff.no data for {orgnr}")
         return proff_data
+        
+    except Exception as e:
+        logging.error(f"Failed to scrape Proff.no for {orgnr}: {e}")
+        return None
 
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Could not scrape Proff.no for {orgnr}: {e}")
-        return None  # Changed from {} to None for consistency
+
+def update_lacrm_contact(contact_id: str, payload: Dict[str, Any], config: configparser.ConfigParser, dry_run: bool = False) -> bool:
+    """
+    Updates a contact in LACRM with the provided payload data.
+    """
+    if dry_run:
+        logging.info(f"[DRY RUN] Would update LACRM contact {contact_id} with payload: {payload}")
+        return True
+    
+    try:
+        params = {
+            "UserCode": config['LACRM']['UserCode'],
+            "APIToken": config['LACRM']['APIToken'],
+            "Function": "EditContact",
+            "Parameters": json.dumps({
+                "ContactId": contact_id,
+                "CustomFields": payload
+            })
+        }
+        
+        response = requests.post(LACRM_API_URL, params=params, timeout=15)
+        response.raise_for_status()
+        
+        result = response.json()
+        if result.get("Success"):
+            logging.info(f"Successfully updated LACRM contact {contact_id}")
+            return True
+        else:
+            logging.error(f"LACRM API error updating contact {contact_id}: {result}")
+            return False
+            
+    except Exception as e:
+        logging.error(f"Failed to update LACRM contact {contact_id}: {e}")
+        return False
 
 
-# --- Sales Heuristics Engine ---
 def apply_sales_heuristics(enriched_data: Dict[str, Any]) -> Dict[str, str]:
     """
     Applies a set of sales rules to the enriched data to generate pipeline
-    recommendations.
+    recommendations with Norwegian categories.
     """
     pipelines: Dict[str, str] = {}
     now = datetime.now(timezone.utc)
 
-    # Rule: Startup Onboarding Package (Org < 2 yrs old)
+    # Rule: Startup-pakke (Company < 2 years old)
     est_date_str = enriched_data.get('stiftelsesdato')
     if est_date_str:
         try:
@@ -598,82 +771,91 @@ def apply_sales_heuristics(enriched_data: Dict[str, Any]) -> Dict[str, str]:
             )
             age_years = (now - est_date).days / 365.25
             if age_years < 2:
-                pipelines['Startup Onboarding Package'] = (
-                    f"Company is young ({age_years:.1f} years old)."
+                pipelines['Startup-pakke'] = (
+                    f"Selskap etablert < 2 år ({age_years:.1f} år gammelt), ofte uten CRM, branding eller struktur."
                 )
         except ValueError:
             logging.warning(f"Could not parse stiftelsesdato: {est_date_str}")
 
-    # Rule: Web Design / Security (No website or HTTPS missing)
+    # Rule: Webdesign / Nettprofil (No website or outdated)
     website = enriched_data.get('hjemmeside')
     domain_health = enriched_data.get('domain_health', {})
     if not website:
-        pipelines['Web Design / Security'] = "No website listed in Brreg."
+        pipelines['Webdesign / Nettprofil'] = "Ingen nettside, eller utdatert/ufullstendig"
     elif domain_health.get('ssl_valid') is False:
-        pipelines['Web Design / Security'] = "Website does not use HTTPS or has an invalid SSL certificate."
+        pipelines['Sikkerhetsoppgradering'] = "HTTP uten HTTPS, ugyldig SSL, exposed CMS"
 
-    # Rule: Automation First Entry (No employees listed)
+    # Rule: Professional email check
+    if website:
+        # Extract domain from website for email analysis
+        domain = website.replace('https://', '').replace('http://', '').split('/')[0]
+        # Simple check for unprofessional email domains (this is basic - could be enhanced)
+        unprofessional_domains = ['gmail.com', 'hotmail.com', 'online.no', 'yahoo.com', 'live.no']
+        if any(unpro_domain in domain.lower() for unpro_domain in unprofessional_domains):
+            pipelines['Profesjonell e-post / branding'] = "Gmail, Hotmail, Online.no, Yahoo etc. brukt som primær e-post"
+
+    # Rule: Automatisering / første løsning (No employees listed)
     employees = enriched_data.get('antallAnsatte')
     if employees == 0:
-        pipelines['Automation First Entry'] = "No registered employees."
+        pipelines['Automatisering / første løsning'] = "Ingen ansatte, nyregistrert, eller enkel enmannsbedrift uten digitale systemer"
 
-    # Rule: Financial Health
+    # Rule: Business Restructuring based on financial health
     financial_health = enriched_data.get('financial_health', {})
-    if PROFITABILITY_CONCERN in financial_health:
-        pipelines['Financial Consulting'] = (
-            financial_health[PROFITABILITY_CONCERN]
-        )
+    if PROFITABILITY_CONCERN in financial_health or REVENUE_CONCERN in financial_health:
+        pipelines['Omprofilering / nye markeder'] = "Regnskapstall viser fall eller lav vekst siste 2 år"
 
-    # Rule: Fiken User
+    # Rule: Fiken Integration
     if enriched_data.get('fiken_usage', {}).get('uses_fiken'):
-        pipelines['Fiken Integration Services'] = "Company appears to use Fiken."
+        pipelines['Regnskapsintegrasjon / Fiken'] = "Mismatching mellom kontaktdata og regnskapsdata, eller manglende fakturastrøm"
 
-    # Rule: Growth Signals (Hiring)
-    job_openings = enriched_data.get('job_openings', {})
-    if isinstance(job_openings, dict) and job_openings.get('hiring_status') == "Actively hiring":
-        recent_roles = job_openings.get('recent_roles', [])
-        if isinstance(recent_roles, list):
-            roles_str = [str(r) for r in recent_roles]
-            pipelines['Recruitment & HR Services'] = f"Company is actively hiring for roles like: {', '.join(roles_str)}"
+    # Rule: Service-based businesses (booking system)
+    industry_desc = enriched_data.get('naeringskode1', {}).get('beskrivelse', '').lower()
+    service_industries = ['frisør', 'tannlege', 'klinikk', 'behandling', 'terapi', 'helse']
+    if any(service_term in industry_desc for service_term in service_industries):
+        pipelines['Bestilling / kalender / tilstedeværelse'] = "Tjenestebasert bedrift (frisør, tannlege, klinikk) uten online booking"
 
-    # Rule: Visibility Boost (Weak Proff/LinkedIn presence)
+    # Rule: Hosting / vedlikehold issues
+    tech_stack = enriched_data.get('tech_stack', {})
+    if tech_stack.get('error') or domain_health.get('https_accessible') is False:
+        pipelines['Hosting / vedlikehold'] = "Nettside treg, nede, eller med tekniske feil (cloud-problemer)"
+
+    # Rule: SEO + reviews for competitive industries
+    competitive_industries = [
+        "butikkhandel", "restaurant", "eiendomsmegling", "regnskap",
+        "programvare", "konsulent", "håndverker", "rådgivning"
+    ]
+    if any(term in industry_desc for term in competitive_industries):
+        pipelines['SEO + reviews + nettpakke'] = "Bransje = konkurranseutsatt (butikk, restaurant, rådgivning) og dårlig synlighet"
+
+    # Rule: Modernization for older companies (>10 years)
+    if est_date_str:
+        try:
+            est_date = datetime.strptime(est_date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            age_years = (now - est_date).days / 365.25
+            if age_years > 10 and (not website or domain_health.get('ssl_valid') is False):
+                pipelines['Modernisering'] = "Eldre firma (>10 år) med dårlig nettside, generisk e-post, eller manglende digitale løsninger"
+        except ValueError:
+            pass
+
+    # Rule: Customer feedback system
     proff_data = enriched_data.get('proff_data', {})
     if isinstance(proff_data, dict):
         key_figs_value = proff_data.get('key_figures')
-        if not key_figs_value or (
-            isinstance(key_figs_value, str)
-            and "no key figures" in key_figs_value
-        ):
-            pipelines['Visibility Boost'] = "Weak Proff.no presence."
+        if not key_figs_value or (isinstance(key_figs_value, str) and "no key figures" in key_figs_value):
+            pipelines['Kundetilbakemeldingssystem'] = "Ingen reviews på Proff.no, ingen referanser eller rating"
 
-    # Rule: Domain Health Issues
-    if "No MX records" in str(domain_health.get('mx_records')):
-        pipelines['Email Setup & Security'] = "Missing MX records suggest broken or poorly configured email."
-
-    # Rule: AI Website Analysis
-    ai_analysis = enriched_data.get('ai_analysis', {})
-    if "unclear" in ai_analysis.get('summary', '').lower():
-        pipelines['Copywriting & UX Review'] = "AI analysis suggests website clarity is low."
-
-    # Rule: Social Media
+    # Rule: Visibility package
     socials = enriched_data.get('social_media_presence', {})
-    if not any("found" in v.lower() for v in socials.values()):
-        pipelines['Social Media Management'] = (
-            "Low or no detectable social media presence."
-        )
+    if not any("found" in str(v).lower() for v in socials.values()):
+        pipelines['Synlighetspakke (AI, SEO, bilder)'] = "Mangler Google Business, LinkedIn, eller har svak digital synlighet"
 
-    # Rule: SEO + Reviews (Industry = competition-heavy)
-    competitive_industries = [
-        "butikkhandel", "restaurant", "eiendomsmegling", "regnskap",
-        "programvare", "konsulent", "håndverker"
-    ]
-    industry_desc = enriched_data.get('naeringskode1', {}).get(
-        'beskrivelse', ''
-    ).lower()
-    if any(term in industry_desc for term in competitive_industries):
-        pipelines['SEO + Reviews'] = (
-            f"Industry '{industry_desc}' may be competition-heavy."
-        )
+    # Rule: CRM Integration (based on contact management issues)
+    if not enriched_data.get('urls', {}) or not enriched_data.get('proff_data', {}):
+        pipelines['Skreddersydd CRM / integrasjon'] = "Når CRM-mangler blir åpenbare – kontaktkaos, dobbeltdrift, manuell oppfølging"
+
+    # Rule: Email marketing
+    if not enriched_data.get('company_news', {}).get('recent_news'):
+        pipelines['E-postmarkedsføring / nyhetsbrev'] = "Ingen form for kundedialog, eller manglende samtykke / strategi"
 
     return pipelines
 
@@ -874,7 +1056,52 @@ def sync_all_lacrm_contacts(
             logging.warning(f"Failed to enrich data for {orgnr}, cannot sync.")
             continue
 
-        # --- Stage 3: Map Enriched Data to LACRM Fields and Update ---
+        # --- Stage 3a: Create Pipeline Items for Potential Customers ---
+        recommendations = apply_sales_heuristics(enriched_data)
+        if recommendations and not args.dry_run:
+            pipeline_id = get_or_create_pipeline(config)
+            if pipeline_id:
+                for recommendation, reason in recommendations.items():
+                    # Map English recommendations to Norwegian services
+                    norwegian_service = PIPELINE_SUGGESTIONS.get(
+                        recommendation, recommendation
+                    )
+                    
+                    # Generate AI sales comment
+                    ai_comment = generate_ai_sales_comment(
+                        enriched_data, norwegian_service
+                    )
+                    
+                    try:
+                        pipeline_item_created = create_pipeline_item(
+                            config=config,
+                            pipeline_id=pipeline_id,
+                            company_name=enriched_data.get('navn', company_name),
+                            orgnr=orgnr,
+                            suggested_service=norwegian_service,
+                            phone=enriched_data.get('telefon', ''),
+                            email='',  # Email not available in Brreg data
+                            ai_comment=ai_comment
+                        )
+                        if pipeline_item_created:
+                            logging.info(
+                                f"Created pipeline item for {company_name}: "
+                                f"{norwegian_service}"
+                            )
+                        else:
+                            logging.warning(
+                                f"Failed to create pipeline item for "
+                                f"{company_name}"
+                            )
+                    except Exception as e:
+                        logging.error(
+                            f"Error creating pipeline item for "
+                            f"{company_name}: {e}"
+                        )
+            else:
+                logging.warning("Could not get or create pipeline for recommendations")
+
+        # --- Stage 3b: Map Enriched Data to LACRM Fields and Update ---
         if args.sync_lacrm: # Only perform the full update if sync is enabled
             lacrm_update_payload = map_data_to_lacrm_fields(enriched_data, config)
             if lacrm_update_payload:
@@ -977,28 +1204,26 @@ def main():
     )
 
     # User Manual Group
-    manual_group = parser.add_argument_group('USER MANUAL')
-    manual_group.add_argument(
-        '-h', '--help', action='help',
-        help="Show this help message and exit.\n\n"
-             "--- HOW TO USE ---\n"
-             "1. Single Company Update:\n"
-             "   Fetch data for one company by its organization number.\n"
-             "   > python lacrm_sync.py --oppdater 998877665\n\n"
-             "2. Full LACRM Sync:\n"
-             "   Fetch data for all companies in your LACRM that have an orgnr.\n"
-             "   > python lacrm_sync.py --sync-lacrm\n\n"
-             "3. Sync and Find Missing Numbers:\n"
-             "   Sync all companies and also search for orgnr for those missing it.\n"
-             "   > python lacrm_sync.py --sync-lacrm --update-missing-orgnr\n\n"
-             "4. Dry Run:\n"
-             "   Simulate a sync without making any actual changes to LACRM.\n"
-             "   > python lacrm_sync.py --sync-lacrm --dryrun\n\n"
-             "5. Automated Scheduling (Cron):\n"
-             "   Set up a daily task to run the sync automatically at 3 AM.\n"
-             "   > python lacrm_sync.py --cron\n"
-             "   To remove it:\n"
-             "   > python lacrm_sync.py --removecron\n"
+    parser.description = (
+        "Smart Contact Enrichment Engine for LACRM.\n\n"
+        "--- HOW TO USE ---\n"
+        "1. Single Company Update:\n"
+        "   Fetch data for one company by its organization number.\n"
+        "   > python lacrm_sync.py --oppdater 998877665\n\n"
+        "2. Full LACRM Sync:\n"
+        "   Fetch data for all companies in your LACRM that have an orgnr.\n"
+        "   > python lacrm_sync.py --sync-lacrm\n\n"
+        "3. Sync and Find Missing Numbers:\n"
+        "   Sync all companies and also search for orgnr for those missing it.\n"
+        "   > python lacrm_sync.py --sync-lacrm --update-missing-orgnr\n\n"
+        "4. Dry Run:\n"
+        "   Simulate a sync without making any actual changes to LACRM.\n"
+        "   > python lacrm_sync.py --sync-lacrm --dryrun\n\n"
+        "5. Automated Scheduling (Cron):\n"
+        "   Set up a daily task to run the sync automatically at 3 AM.\n"
+        "   > python lacrm_sync.py --cron\n"
+        "   To remove it:\n"
+        "   > python lacrm_sync.py --removecron\n"
     )
 
     # Operation Mode Group
