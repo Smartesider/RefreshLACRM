@@ -1,0 +1,16 @@
+2025-07-14 14:58:25,075 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 14:58:25,075 - INFO - No database connection string. Using file-based cache.
+2025-07-14 14:58:25,076 - INFO - Fetching fresh data for 995298775.
+2025-07-14 14:58:25,076 - INFO - Fetching data for orgnr 995298775 from Brreg.
+2025-07-14 14:58:25,231 - ERROR - HTTP error fetching data for 995298775: 404 Client Error:  for url: https://data.brreg.no/enhetsregisteret/api/enheter/995298775
+2025-07-14 14:58:50,096 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 14:58:50,096 - INFO - No database connection string. Using file-based cache.
+2025-07-14 14:58:50,097 - INFO - Fetching fresh data for 923609016.
+2025-07-14 14:58:50,099 - INFO - Fetching data for orgnr 923609016 from Brreg.
+2025-07-14 15:01:34,773 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 15:01:34,773 - INFO - No database connection string. Using file-based cache.
+2025-07-14 15:01:34,773 - INFO - Fetching fresh data for 923609016.
+2025-07-14 15:01:34,773 - INFO - Fetching data for orgnr 923609016 from Brreg.
+2025-07-14 15:01:35,114 - WARNING - Proff.no returned status 404 for 923609016
+2025-07-14 15:01:35,114 - WARNING - Invalid or unsafe website URL: www.equinor.com
+2025-07-14 15:01:35,116 - INFO - Successfully enriched and cached data for 923609016.

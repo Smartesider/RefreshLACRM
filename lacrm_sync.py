@@ -544,18 +544,21 @@ def create_pipeline_item(
     """Creates a new item in the Potensielle kunder pipeline."""
     logging.info(f"Creating pipeline item for {company_name} ({orgnr})")
     
-    # Prepare the pipeline item data
+    # Prepare the pipeline item data with correct field IDs
     item_data = {
         "PipelineId": pipeline_id,
         "Name": f"{company_name} - {suggested_service}",
         "StatusName": DEFAULT_PIPELINE_STATUS,
         "CustomFields": {
-            "Company": company_name,
-            "OrgNr": orgnr,
-            "Suggested": suggested_service,
-            "Phone": phone or "",
-            "Email": email or "",
-            "Comment": ai_comment or f"Automatisk forslag basert på analyse av {company_name}. Anbefalt tjeneste: {suggested_service}"
+            "4040978312246995862143020657543": company_name,  # company
+            "4040978325247338748089826771438": orgnr,  # orgnr
+            "4040978367411984014571433950341": suggested_service,  # category_main
+            "4040978530497342527228366666677": phone or "",  # phone
+            "4040978542434691785927660074431": email or "",  # email
+            "4040978809695731611850070969647": ai_comment or (
+                f"Automatisk forslag basert på analyse av {company_name}. "
+                f"Anbefalt tjeneste: {suggested_service}"
+            )  # comment
         }
     }
     
@@ -1110,8 +1113,11 @@ def sync_all_lacrm_contacts(
                 logging.info(f"No new data to sync for contact {contact_id}.")
 
 
-def map_data_to_lacrm_fields(enriched_data: Dict[str, Any], config: configparser.ConfigParser) -> Dict[str, Any]:
-    """Maps the enriched data dictionary to a dictionary of LACRM Custom Field IDs and values."""
+def map_data_to_lacrm_fields(
+    enriched_data: Dict[str, Any],
+    config: configparser.ConfigParser
+) -> Dict[str, Any]:
+    """Maps enriched data to Company Card Custom Fields in LACRM."""
     if 'LACRM_CUSTOM_FIELDS' not in config:
         logging.warning("'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.")
         return {}
@@ -1121,59 +1127,104 @@ def map_data_to_lacrm_fields(enriched_data: Dict[str, Any], config: configparser
 
     # Helper to safely add to payload
     def add_to_payload(key: str, value: Any):
-        if key in mapping_config and value is not None:
+        if key in mapping_config and mapping_config[key] and value is not None:
             field_id = mapping_config[key]
-            # Simple formatting for various data types
-            if isinstance(value, (dict, list)) and value:
-                payload[field_id] = json.dumps(value, indent=2, ensure_ascii=False)
-            elif isinstance(value, bool):
+            # Format data appropriately for Company Card fields
+            if isinstance(value, bool):
                 payload[field_id] = "Yes" if value else "No"
             elif isinstance(value, str) and value:
                 payload[field_id] = value
-            elif not isinstance(value, (dict, list, str, bool)):
+            elif isinstance(value, (int, float)):
                 payload[field_id] = str(value)
+            elif isinstance(value, dict) and value:
+                # For complex data, create readable summary
+                payload[field_id] = json.dumps(value, indent=2, ensure_ascii=False)
+            elif isinstance(value, list) and value:
+                payload[field_id] = ", ".join(str(item) for item in value)
 
-
-    # --- Mapping Logic ---
-    add_to_payload('BrregJson', enriched_data) 
+    # --- Map to Company Card Custom Fields ---
     
-    proff_data = enriched_data.get('proff_data')
-    if isinstance(proff_data, dict):
-        add_to_payload('ProffJson', proff_data)
-        key_figures = proff_data.get('key_figures')
-        if key_figures and isinstance(key_figures, dict):
-            add_to_payload(
-                'ProffKeyFigures',
-                json.dumps(key_figures, indent=2, ensure_ascii=False)
-            )
-        elif key_figures:
-            add_to_payload('ProffKeyFigures', str(key_figures))
-
-    domain_health = enriched_data.get('domain_health')
-    if isinstance(domain_health, dict):
-        add_to_payload('DomainHealth', domain_health)
-        add_to_payload('SslValid', domain_health.get('ssl_valid'))
-
-    tech_stack = enriched_data.get('tech_stack')
-    if (tech_stack and isinstance(tech_stack, dict) and
-            not tech_stack.get("error")):
-        add_to_payload('TechStack', tech_stack)
-
-    ai_summary = enriched_data.get('ai_analysis', {}).get('summary')
-    if ai_summary:
-        add_to_payload('AiAnalysis', ai_summary)
+    # Basic company information
+    add_to_payload('brreg_navn', enriched_data.get('navn'))
+    orgnr = enriched_data.get('organisasjonsnummer', '')
+    if orgnr:
+        orgnr_url = f"https://virksomhet.brreg.no/nb/oppslag/enheter/{orgnr}"
+        add_to_payload('orgnr', orgnr_url)
+    add_to_payload(
+        'bransje',
+        enriched_data.get('naeringskode1', {}).get('beskrivelse')
+    )
+    add_to_payload('antall_ansatte', enriched_data.get('antallAnsatte'))
+    add_to_payload('etablert', enriched_data.get('stiftelsesdato'))
+    add_to_payload('nettsted', enriched_data.get('hjemmeside'))
     
-    # Add new fields
-    add_to_payload('FinancialHealth', enriched_data.get('financial_health'))
-    add_to_payload('UsesFiken', enriched_data.get('fiken_usage', {}).get('uses_fiken'))
-    add_to_payload('CompanyNews', enriched_data.get('company_news'))
-    add_to_payload('JobOpenings', enriched_data.get('job_openings'))
+    # Email handling - try to extract from various sources
+    email = enriched_data.get('epost')
+    if not email:
+        proff_data = enriched_data.get('proff_data', {})
+        if isinstance(proff_data, dict):
+            contact_info = proff_data.get('contact_info', {})
+            if isinstance(contact_info, dict):
+                email = contact_info.get('email')
+    add_to_payload('firma_epost', email)
 
+    # Proff rating (from financial health analysis)
+    financial_health = enriched_data.get('financial_health', {})
+    if isinstance(financial_health, dict):
+        status = financial_health.get('status')
+        if status == 'Appears stable based on available data.':
+            proff_rating = "Stabil"
+        elif any(concern in financial_health 
+                for concern in [PROFITABILITY_CONCERN, REVENUE_CONCERN]):
+            proff_rating = "Risiko"
+        else:
+            proff_rating = "Ukjent"
+        add_to_payload('proff_rating', proff_rating)
+
+    # Generate sales recommendations for pipeline_anbefalt
     recommendations = apply_sales_heuristics(enriched_data)
     if recommendations:
-        # Format recommendations into a readable string
-        rec_string = "\n".join([f"- {pipeline}: {reason}" for pipeline, reason in recommendations.items()])
-        add_to_payload('SalesRecommendations', rec_string)
+        # Take the first (most relevant) recommendation
+        primary_recommendation = list(recommendations.keys())[0]
+        # Map to simplified categories for Company Card
+        recommendation_mapping = {
+            'Webdesign / Nettprofil': 'Webdesign / Nettprofil',
+            'Sikkerhetsoppgradering': 'Sikkerhetsoppgradering', 
+            'Profesjonell e-post / branding': 'Profesjonell e-post',
+            'Automatisering / første løsning': 'Automatisering / første løsning',
+            'Startup-pakke': 'Startup-pakke',
+            'Bestilling / kalender / tilstedeværelse': 'Bestilling / kalender / tilstedeværelse',
+            'Hosting / vedlikehold': 'Hosting / vedlikehold',
+            'Omprofilering / nye markeder': 'Omprofilering',
+            'SEO + reviews + nettpakke': 'SEO / Reviews',
+            'Modernisering': 'Modernisering',
+            'Kundetilbakemeldingssystem': 'Kundetilbakemeldingssystem',
+            'Synlighetspakke (AI, SEO, bilder)': 'Synlighetspakke (AI, SEO, bilder)',
+            'Skreddersydd CRM / integrasjon': 'Skreddersydd CRM / integrasjon',
+            'E-postmarkedsføring / nyhetsbrev': 'E-postmarkedsføring / nyhetsbrev',
+            'Regnskapsintegrasjon / Fiken': 'Regnskapsintegrasjon / Fiken'
+        }
+        simplified_recommendation = recommendation_mapping.get(primary_recommendation, 'Annet')
+        add_to_payload('pipeline_anbefalt', simplified_recommendation)
+
+    # Generate AI sales notes
+    ai_analysis = enriched_data.get('ai_analysis', {})
+    notes = []
+    if isinstance(ai_analysis, dict) and ai_analysis.get('summary'):
+        notes.append(f"AI Analyse: {ai_analysis['summary']}")
+    
+    if recommendations:
+        notes.append("Anbefalinger:")
+        for rec, reason in list(recommendations.items())[:3]:  # Top 3 recommendations
+            notes.append(f"- {rec}: {reason}")
+    
+    if notes:
+        add_to_payload('salgsmotor_notat', "\n".join(notes))
+
+    # Update log
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    update_entry = f"{timestamp}: Automatisk oppdatering fra Salgsmotor"
+    add_to_payload('oppdateringslogg', update_entry)
 
     return payload
 

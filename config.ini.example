@@ -17,18 +17,27 @@ ConnectionString =
 [LACRM_CUSTOM_FIELDS]
 # --- Map these keys to the Custom Field IDs from your LACRM account ---
 
-# Full JSON dumps for debugging or advanced usage
+# Company Card Custom Fields (for existing contacts)
+orgnr = 
+bransje = 
+antall_ansatte = 
+brreg_navn = 
+etablert = 
+nettsted = 
+firma_epost = 
+proff_rating = 
+salgsmotor_notat = 
+oppdateringslogg = 
+pipeline_anbefalt = 
+
+# Technical Analysis Fields (for detailed data storage)
 BrregJson = 
 ProffJson = 
-
-# Key Data Points
 ProffKeyFigures = 
 SslValid = 
 TechStack = 
 AiAnalysis = 
 SalesRecommendations = 
-
-# Advanced Feature Fields
 FinancialHealth = 
 UsesFiken = 
 CompanyNews = 

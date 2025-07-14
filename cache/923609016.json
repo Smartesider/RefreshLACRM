@@ -1,0 +1,111 @@
+{
+    "organisasjonsnummer": "923609016",
+    "navn": "EQUINOR ASA",
+    "organisasjonsform": {
+        "kode": "ASA",
+        "beskrivelse": "Allmennaksjeselskap",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/ASA"
+            }
+        }
+    },
+    "hjemmeside": "www.equinor.com",
+    "postadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "4035",
+        "poststed": "STAVANGER",
+        "adresse": [
+            "Postboks 8500"
+        ],
+        "kommune": "STAVANGER",
+        "kommunenummer": "1103"
+    },
+    "registreringsdatoEnhetsregisteret": "1995-03-12",
+    "registrertIMvaregisteret": true,
+    "frivilligMvaRegistrertBeskrivelser": [
+        "Utleier av bygg eller anlegg"
+    ],
+    "naeringskode1": {
+        "kode": "06.100",
+        "beskrivelse": "Utvinning av råolje"
+    },
+    "naeringskode2": {
+        "kode": "06.200",
+        "beskrivelse": "Utvinning av naturgass"
+    },
+    "naeringskode3": {
+        "kode": "19.200",
+        "beskrivelse": "Produksjon av raffinerte petroleumsprodukter"
+    },
+    "antallAnsatte": 21409,
+    "harRegistrertAntallAnsatte": true,
+    "registreringsdatoFrivilligMerverdiavgiftsregisteret": "2022-09-20",
+    "registreringsdatoMerverdiavgiftsregisteret": "1989-07-01",
+    "registreringsdatoMerverdiavgiftsregisteretEnhetsregisteret": "2022-09-20",
+    "registreringsdatoAntallAnsatteEnhetsregisteret": "2025-06-12",
+    "registreringsdatoAntallAnsatteNAVAaregisteret": "2025-06-10",
+    "telefon": "51 99 00 00",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "4035",
+        "poststed": "STAVANGER",
+        "adresse": [
+            "Forusbeen 50"
+        ],
+        "kommune": "STAVANGER",
+        "kommunenummer": "1103"
+    },
+    "stiftelsesdato": "1972-09-18",
+    "institusjonellSektorkode": {
+        "kode": "1120",
+        "beskrivelse": "Statlig eide aksjeselskaper mv."
+    },
+    "registrertIForetaksregisteret": true,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "sisteInnsendteAarsregnskap": "2024",
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "vedtektsdato": "2025-05-14",
+    "vedtektsfestetFormaal": [
+        "Å utvikle, produsere og markedsføre ulike former for energi, avledede",
+        "produkter og tjenester, samt annen virksomhet. Virksomheten kan også",
+        "drives gjennom deltakelse i eller i samarbeid med andre selskaper."
+    ],
+    "aktivitet": [
+        "Selv, eller gjennom deltakelse i eller sammen med andre selskaper å",
+        "utvikle, produsere og markedsføre ulike former for energi, avledede",
+        "produkter og tjenester, samt annen virksomhet. Utleie av bygg og",
+        "anlegg."
+    ],
+    "registreringsdatoForetaksregisteret": "1988-04-28",
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/923609016"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {},
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-14T13:01:35.114920+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-14T13:01:35.114955+00:00"
+    },
+    "_timestamp": "2025-07-14T13:01:35.115069+00:00"
+}
