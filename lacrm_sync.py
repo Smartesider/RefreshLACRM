@@ -15,8 +15,10 @@ import json
 import logging
 import os
 import re
+import shlex
 import subprocess
 import sys
+import urllib.parse
 from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 
@@ -27,7 +29,7 @@ import whois
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from tqdm import tqdm
-from Wappalyzer import Wappalyzer, WebPage
+from wappalyzer import Wappalyzer, WebPage
 from whois.parser import PywhoisError
 
 from db import db_conn, setup_database, db_load_from_cache, db_save_to_cache
@@ -452,13 +454,13 @@ def get_financial_health(proff_data: Dict[str, Any]) -> Dict[str, str]:
 def get_custom_fields(config: configparser.ConfigParser) -> Optional[Dict[str, Any]]:
     """Fetches all custom fields from LACRM to help identify Field IDs."""
     logging.info("Fetching custom fields from LACRM...")
-    params = {
+    data = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
         "Function": "GetCustomFields",
     }
     try:
-        response = requests.post(LACRM_API_URL, params=params, timeout=30)
+        response = requests.post(LACRM_API_URL, data=data, timeout=30)
         response.raise_for_status()
         result = response.json()
         if result.get('Success'):
@@ -539,13 +541,13 @@ def get_lacrm_contacts(
 ) -> Optional[List[Dict[str, Any]]]:
     """Fetches all contacts from LACRM."""
     logging.info("Fetching all contacts from LACRM...")
-    params = {
+    data = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
         "Function": "GetContacts",
     }
     try:
-        response = requests.post(LACRM_API_URL, params=params, timeout=30)
+        response = requests.post(LACRM_API_URL, data=data, timeout=30)
         response.raise_for_status()
         result = response.json()
         if result.get('Success'):
@@ -565,14 +567,14 @@ def get_or_create_pipeline(config: configparser.ConfigParser) -> Optional[str]:
     logging.info(f"Getting or creating pipeline: {PIPELINE_NAME}")
     
     # First, try to get existing pipelines
-    params = {
+    data = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
         "Function": "GetPipelines",
     }
     
     try:
-        response = requests.post(LACRM_API_URL, params=params, timeout=15)
+        response = requests.post(LACRM_API_URL, data=data, timeout=15)
         response.raise_for_status()
         result = response.json()
         
@@ -586,7 +588,7 @@ def get_or_create_pipeline(config: configparser.ConfigParser) -> Optional[str]:
                     return pipeline_id
             
             # If not found, create new pipeline
-            create_params = {
+            create_data = {
                 "UserCode": config['LACRM']['UserCode'],
                 "APIToken": config['LACRM']['APIToken'],
                 "Function": "CreatePipeline",
@@ -596,7 +598,7 @@ def get_or_create_pipeline(config: configparser.ConfigParser) -> Optional[str]:
                 })
             }
             
-            create_response = requests.post(LACRM_API_URL, params=create_params, timeout=15)
+            create_response = requests.post(LACRM_API_URL, data=create_data, timeout=15)
             create_response.raise_for_status()
             create_result = create_response.json()
             
@@ -647,7 +649,7 @@ def create_pipeline_item(
         }
     }
     
-    params = {
+    data = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
         "Function": "CreatePipelineItem",
@@ -655,7 +657,7 @@ def create_pipeline_item(
     }
     
     try:
-        response = requests.post(LACRM_API_URL, params=params, timeout=15)
+        response = requests.post(LACRM_API_URL, data=data, timeout=15)
         response.raise_for_status()
         result = response.json()
         
@@ -816,7 +818,7 @@ def update_lacrm_contact(contact_id: str, payload: Dict[str, Any], config: confi
         return True
     
     try:
-        params = {
+        data = {
             "UserCode": config['LACRM']['UserCode'],
             "APIToken": config['LACRM']['APIToken'],
             "Function": "EditContact",
@@ -826,7 +828,7 @@ def update_lacrm_contact(contact_id: str, payload: Dict[str, Any], config: confi
             })
         }
         
-        response = requests.post(LACRM_API_URL, params=params, timeout=15)
+        response = requests.post(LACRM_API_URL, data=data, timeout=15)
         response.raise_for_status()
         
         result = response.json()

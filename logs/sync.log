@@ -14,3 +14,33 @@
 2025-07-14 15:01:35,114 - WARNING - Proff.no returned status 404 for 923609016
 2025-07-14 15:01:35,114 - WARNING - Invalid or unsafe website URL: www.equinor.com
 2025-07-14 15:01:35,116 - INFO - Successfully enriched and cached data for 923609016.
+2025-07-14 17:14:20,587 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:14:20,588 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:14:20,589 - INFO - Fetching fresh data for 998877665.
+2025-07-14 17:14:20,589 - INFO - Fetching data for orgnr 998877665 from Brreg.
+2025-07-14 17:14:20,723 - ERROR - HTTP error fetching data for 998877665: 404 Client Error:  for url: https://data.brreg.no/enhetsregisteret/api/enheter/998877665
+2025-07-14 17:17:21,390 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:17:21,391 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:17:21,391 - INFO - Fetching fresh data for 974760673.
+2025-07-14 17:17:21,391 - INFO - Fetching data for orgnr 974760673 from Brreg.
+2025-07-14 17:17:21,715 - WARNING - Proff.no returned status 404 for 974760673
+2025-07-14 17:17:21,716 - WARNING - Invalid or unsafe website URL: www.brreg.no
+2025-07-14 17:17:21,717 - INFO - Successfully enriched and cached data for 974760673.
+2025-07-14 17:18:13,859 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:18:13,860 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:18:13,860 - INFO - Fetching fresh data for 926346799.
+2025-07-14 17:18:13,860 - INFO - Fetching data for orgnr 926346799 from Brreg.
+2025-07-14 17:18:13,987 - ERROR - HTTP error fetching data for 926346799: 404 Client Error:  for url: https://data.brreg.no/enhetsregisteret/api/enheter/926346799
+2025-07-14 17:18:32,044 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:18:32,044 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:18:32,044 - INFO - Fetching fresh data for 988077917.
+2025-07-14 17:18:32,044 - INFO - Fetching data for orgnr 988077917 from Brreg.
+2025-07-14 17:18:32,337 - WARNING - Proff.no returned status 404 for 988077917
+2025-07-14 17:18:32,339 - INFO - Successfully enriched and cached data for 988077917.
+2025-07-14 17:18:55,220 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:18:55,220 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:18:55,221 - INFO - Using cached data for 923609016.
+2025-07-14 17:32:10,931 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-14 17:32:10,932 - INFO - No database connection string. Using file-based cache.
+2025-07-14 17:32:10,932 - INFO - Fetching custom fields from LACRM...
+2025-07-14 17:32:11,560 - ERROR - Error connecting to LACRM API: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/?UserCode=&APIToken=&Function=GetCustomFields

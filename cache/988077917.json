@@ -1,0 +1,36 @@
+{
+    "organisasjonsnummer": "988077917",
+    "navn": "ENKLERE LIV AS",
+    "organisasjonsform": {
+        "kode": "AS",
+        "beskrivelse": "Aksjeselskap",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/AS"
+            }
+        }
+    },
+    "slettedato": "2020-06-25",
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/988077917"
+        }
+    },
+    "respons_klasse": "SlettetEnhet",
+    "urls": {},
+    "proff_data": {},
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-14T15:18:32.338191+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-14T15:18:32.338203+00:00"
+    },
+    "_timestamp": "2025-07-14T15:18:32.338248+00:00"
+}

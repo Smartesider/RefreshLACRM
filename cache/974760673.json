@@ -1,0 +1,90 @@
+{
+    "organisasjonsnummer": "974760673",
+    "navn": "REGISTERENHETEN I BRØNNØYSUND",
+    "organisasjonsform": {
+        "kode": "ORGL",
+        "beskrivelse": "Organisasjonsledd",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/ORGL"
+            }
+        }
+    },
+    "hjemmeside": "www.brreg.no",
+    "postadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "8910",
+        "poststed": "BRØNNØYSUND",
+        "adresse": [
+            "Postboks 900"
+        ],
+        "kommune": "BRØNNØY",
+        "kommunenummer": "1813"
+    },
+    "registreringsdatoEnhetsregisteret": "1995-08-09",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+        "kode": "84.110",
+        "beskrivelse": "Generell offentlig administrasjon"
+    },
+    "antallAnsatte": 499,
+    "harRegistrertAntallAnsatte": true,
+    "overordnetEnhet": "912660680",
+    "registreringsdatoAntallAnsatteEnhetsregisteret": "2025-06-12",
+    "registreringsdatoAntallAnsatteNAVAaregisteret": "2025-06-10",
+    "epostadresse": "firmapost@brreg.no",
+    "telefon": "75 00 75 09",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "8900",
+        "poststed": "BRØNNØYSUND",
+        "adresse": [
+            "Havnegata 48"
+        ],
+        "kommune": "BRØNNØY",
+        "kommunenummer": "1813"
+    },
+    "institusjonellSektorkode": {
+        "kode": "6100",
+        "beskrivelse": "Statsforvaltningen"
+    },
+    "registrertIForetaksregisteret": false,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "aktivitet": [
+        "Registeretat."
+    ],
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/974760673"
+        },
+        "overordnetEnhet": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/912660680"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {},
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-14T15:17:21.716431+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-14T15:17:21.716442+00:00"
+    },
+    "_timestamp": "2025-07-14T15:17:21.716485+00:00"
+}
