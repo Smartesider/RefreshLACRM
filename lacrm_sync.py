@@ -27,7 +27,7 @@ import whois
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from tqdm import tqdm
-from wappalyzer_py import Wappalyzer, WebPage
+from Wappalyzer import Wappalyzer, WebPage
 from whois.parser import PywhoisError
 
 from db import db_conn, setup_database, db_load_from_cache, db_save_to_cache
@@ -377,7 +377,7 @@ def detect_tech_stack(url: str) -> Dict[str, Any]:
     try:
         # Note: Wappalyzer can be slow and resource-intensive
         wappalyzer = Wappalyzer.latest()
-        webpage = WebPage(url)
+        webpage = WebPage.new_from_url(url)
         tech = wappalyzer.analyze_with_versions(webpage)
         return tech if tech else {}
     except Exception as e:
