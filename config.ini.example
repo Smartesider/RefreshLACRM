@@ -1,0 +1,36 @@
+[LACRM]
+UserCode = YOUR_USER_CODE
+APIToken = YOUR_API_TOKEN
+
+# Find this in your LACRM settings under 'Programmer API' -> 'Custom Fields'
+OrgNrFieldId = 
+
+[OpenAI]
+# Optional: Add your OpenAI API key to enable AI-driven analysis
+APIKey = YOUR_OPENAI_API_KEY
+
+[Database]
+# Optional: Connection string for PostgreSQL caching
+# Example: postgresql://user:password@host:port/database
+ConnectionString = 
+
+[LACRM_CUSTOM_FIELDS]
+# --- Map these keys to the Custom Field IDs from your LACRM account ---
+
+# Full JSON dumps for debugging or advanced usage
+BrregJson = 
+ProffJson = 
+
+# Key Data Points
+ProffKeyFigures = 
+SslValid = 
+TechStack = 
+AiAnalysis = 
+SalesRecommendations = 
+
+# Advanced Feature Fields
+FinancialHealth = 
+UsesFiken = 
+CompanyNews = 
+JobOpenings = 
+DomainHealth =
