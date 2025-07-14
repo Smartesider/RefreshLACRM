@@ -2,7 +2,8 @@
 UserCode = YOUR_USER_CODE
 APIToken = YOUR_API_TOKEN
 
-# Find this in your LACRM settings under 'Programmer API' -> 'Custom Fields'
+# Find this in your LACRM settings under 'Settings' -> 'Custom Fields'
+# Look for the OrgNr field and note its numeric Field ID
 OrgNrFieldId = 
 
 [OpenAI]
@@ -15,9 +16,13 @@ APIKey = YOUR_OPENAI_API_KEY
 ConnectionString = 
 
 [LACRM_CUSTOM_FIELDS]
-# --- Map these keys to the Custom Field IDs from your LACRM account ---
+# --- How to find Custom Field IDs ---
+# 1. Run: python lacrm_sync.py --show-fields
+# 2. Look for COMPANY CUSTOM FIELDS in the output
+# 3. Copy the numeric Field IDs (not the names) to the fields below
+# 4. Create missing fields in LACRM Settings -> Custom Fields if needed
 
-# Company Card Custom Fields (for existing contacts)
+# Company Card Custom Fields (replace with your numeric Field IDs)
 orgnr = 
 bransje = 
 antall_ansatte = 
@@ -30,7 +35,7 @@ salgsmotor_notat =
 oppdateringslogg = 
 pipeline_anbefalt = 
 
-# Technical Analysis Fields (for detailed data storage)
+# Technical Analysis Fields (for detailed data storage - optional)
 BrregJson = 
 ProffJson = 
 ProffKeyFigures = 
@@ -42,4 +47,22 @@ FinancialHealth =
 UsesFiken = 
 CompanyNews = 
 JobOpenings = 
-DomainHealth =
+DomainHealth = 
+
+# --- Field Creation Guide ---
+# If you don't have these fields in LACRM yet:
+# 1. Go to LACRM Settings -> Custom Fields
+# 2. Create new Company fields with these names:
+#    - orgnr (Text field for org number URL)
+#    - bransje (Text field for industry)
+#    - antall_ansatte (Number field for employee count)
+#    - brreg_navn (Text field for official company name)
+#    - etablert (Date field for establishment date)
+#    - nettsted (Text field for website URL)
+#    - firma_epost (Text field for company email)
+#    - proff_rating (Dropdown: Stabil, Risiko, Ukjent)
+#    - salgsmotor_notat (Large text field for AI notes)
+#    - oppdateringslogg (Large text field for update log)
+#    - pipeline_anbefalt (Dropdown with 15 service categories)
+# 3. Run --show-fields again to get the new Field IDs
+# 4. Update this config file with the numeric IDs

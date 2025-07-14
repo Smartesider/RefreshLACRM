@@ -449,6 +449,91 @@ def get_financial_health(proff_data: Dict[str, Any]) -> Dict[str, str]:
 
 
 # --- LACRM API Functions ---
+def get_custom_fields(config: configparser.ConfigParser) -> Optional[Dict[str, Any]]:
+    """Fetches all custom fields from LACRM to help identify Field IDs."""
+    logging.info("Fetching custom fields from LACRM...")
+    params = {
+        "UserCode": config['LACRM']['UserCode'],
+        "APIToken": config['LACRM']['APIToken'],
+        "Function": "GetCustomFields",
+    }
+    try:
+        response = requests.post(LACRM_API_URL, params=params, timeout=30)
+        response.raise_for_status()
+        result = response.json()
+        if result.get('Success'):
+            custom_fields = result.get('Result', [])
+            logging.info(f"Successfully fetched {len(custom_fields)} custom fields.")
+            return custom_fields
+        else:
+            logging.error(f"LACRM API Error: {result.get('Result')}")
+            return None
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Error connecting to LACRM API: {e}")
+        return None
+
+
+def print_custom_fields_guide(config: configparser.ConfigParser):
+    """Prints a guide showing all available custom fields and their IDs."""
+    custom_fields = get_custom_fields(config)
+    if not custom_fields:
+        print("❌ Could not fetch custom fields from LACRM.")
+        return
+    
+    print("\n" + "="*80)
+    print("📋 LACRM CUSTOM FIELDS GUIDE")
+    print("="*80)
+    print("Copy the Field IDs below into your config.ini file")
+    print("="*80)
+    
+    contact_fields = []
+    company_fields = []
+    pipeline_fields = []
+    
+    for field in custom_fields:
+        field_id = field.get('FieldId', 'N/A')
+        field_name = field.get('Name', 'Unknown')
+        field_type = field.get('Type', 'Unknown')
+        applies_to = field.get('AppliesTo', 'Unknown')
+        
+        field_info = f"{field_name:<30} | ID: {field_id:<15} | Type: {field_type}"
+        
+        if applies_to == 'Contact':
+            contact_fields.append(field_info)
+        elif applies_to == 'Company':
+            company_fields.append(field_info)
+        elif applies_to == 'Pipeline':
+            pipeline_fields.append(field_info)
+    
+    if contact_fields:
+        print("\n🏢 CONTACT CUSTOM FIELDS:")
+        print("-" * 80)
+        for field in contact_fields:
+            print(f"  {field}")
+    
+    if company_fields:
+        print("\n🏭 COMPANY CUSTOM FIELDS:")
+        print("-" * 80)
+        for field in company_fields:
+            print(f"  {field}")
+        
+        print("\n📝 For Company fields, add these to [LACRM_CUSTOM_FIELDS] section:")
+        print("   Example: brreg_navn = FIELD_ID_NUMBER")
+    
+    if pipeline_fields:
+        print("\n📊 PIPELINE CUSTOM FIELDS:")
+        print("-" * 80)
+        for field in pipeline_fields:
+            print(f"  {field}")
+    
+    print("\n" + "="*80)
+    print("💡 TIP: Look for field names matching these categories:")
+    print("   - orgnr, brreg_navn, bransje, antall_ansatte")
+    print("   - etablert, nettsted, firma_epost, proff_rating")
+    print("   - salgsmotor_notat, oppdateringslogg, pipeline_anbefalt")
+    print("="*80)
+
+
 def get_lacrm_contacts(
     config: configparser.ConfigParser
 ) -> Optional[List[Dict[str, Any]]]:
@@ -1261,16 +1346,19 @@ def main():
         "1. Single Company Update:\n"
         "   Fetch data for one company by its organization number.\n"
         "   > python lacrm_sync.py --oppdater 998877665\n\n"
-        "2. Full LACRM Sync:\n"
+        "2. Show Custom Fields Guide:\n"
+        "   Display all available Custom Fields and their IDs from LACRM.\n"
+        "   > python lacrm_sync.py --show-fields\n\n"
+        "3. Full LACRM Sync:\n"
         "   Fetch data for all companies in your LACRM that have an orgnr.\n"
         "   > python lacrm_sync.py --sync-lacrm\n\n"
-        "3. Sync and Find Missing Numbers:\n"
+        "4. Sync and Find Missing Numbers:\n"
         "   Sync all companies and also search for orgnr for those missing it.\n"
         "   > python lacrm_sync.py --sync-lacrm --update-missing-orgnr\n\n"
-        "4. Dry Run:\n"
+        "5. Dry Run:\n"
         "   Simulate a sync without making any actual changes to LACRM.\n"
         "   > python lacrm_sync.py --sync-lacrm --dryrun\n\n"
-        "5. Automated Scheduling (Cron):\n"
+        "6. Automated Scheduling (Cron):\n"
         "   Set up a daily task to run the sync automatically at 3 AM.\n"
         "   > python lacrm_sync.py --cron\n"
         "   To remove it:\n"
@@ -1288,6 +1376,11 @@ def main():
         '--sync-lacrm',
         action='store_true',
         help="Sync all LACRM contacts."
+    )
+    mode_group.add_argument(
+        '--show-fields',
+        action='store_true',
+        help="Show all available Custom Fields and their IDs from LACRM."
     )
 
     # Modifier Group
@@ -1349,6 +1442,8 @@ def main():
 
     if args.sync_lacrm:
         sync_all_lacrm_contacts(config, args)
+    elif args.show_fields:
+        print_custom_fields_guide(config)
     elif args.oppdater:
         process_single_orgnr(args.oppdater, args)
     else:
