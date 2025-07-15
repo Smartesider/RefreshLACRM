@@ -79,7 +79,7 @@ from db import db_conn, setup_database, db_load_from_cache, db_save_to_cache
 LACRM_API_URL = "https://api.lessannoyingcrm.com"
 BRREG_API_URL = "https://data.brreg.no/enhetsregisteret/api/enheter/{orgnr}"
 BRREG_SEARCH_URL = "https://data.brreg.no/enhetsregisteret/api/enheter"
-PROFF_URL = "https://www.proff.no/selskap/{orgnr}"
+PROFF_URL = "https://www.proff.no/company/{orgnr}"
 GULESIDER_URL = "https://www.gulesider.no/bedrift/{orgnr}"
 CACHE_DIR = "cache"
 LOG_DIR = "logs"
@@ -480,26 +480,50 @@ def get_financial_health(proff_data: Dict[str, Any]) -> Dict[str, str]:
     if not isinstance(key_figures, dict):
         return {"status": "No key figures available."}
 
-    # Example rules (these are simplified and should be expanded)
+    # Updated for new Proff.no structure
     try:
-        revenue_val = key_figures.get("Driftsinntekter", "0")
-        # Sanitize and validate the input
-        revenue_str = str(revenue_val).replace(" ", "").replace(",", "")
-        # Additional validation
-        if not revenue_str.isdigit():
-            raise ValueError("Invalid revenue format")
-        revenue_int = int(revenue_str)
-        if revenue_int < 1000000:
-            health[REVENUE_CONCERN] = "Low revenue (< 1M NOK)."
+        # Try different possible revenue field names from the new structure
+        revenue_val = (key_figures.get("Sum driftsinntekter") or 
+                      key_figures.get("Driftsinntekter") or 
+                      key_figures.get("Omsetning") or "0")
+        
+        # Sanitize and validate the input (handle thousands separators)
+        revenue_str = str(revenue_val).replace(" ", "").replace(",", "").replace("NOK", "").strip()
+        
+        # Handle negative values and validate
+        if revenue_str.startswith('-'):
+            revenue_int = 0  # Negative revenue treated as 0
+        elif revenue_str.isdigit():
+            revenue_int = int(revenue_str)
+        else:
+            raise ValueError(f"Invalid revenue format: {revenue_str}")
+            
+        # Convert from thousands (Proff shows values in thousands)
+        revenue_int = revenue_int * 1000
+        
+        if revenue_int < 1000000:  # Less than 1M NOK
+            health[REVENUE_CONCERN] = f"Low revenue ({revenue_int/1000000:.1f}M NOK)."
 
-        result_val = key_figures.get("Resultat før skatt", "0")
-        result_str = str(result_val).replace(" ", "").replace(",", "")
-        if not result_str.lstrip('-').isdigit():
-            raise ValueError("Invalid result format")
-        result_int = int(result_str)
+        # Check profitability using "Resultat før skatt"
+        result_val = (key_figures.get("Resultat før skatt") or 
+                     key_figures.get("Årsresultat") or "0")
+        
+        result_str = str(result_val).replace(" ", "").replace(",", "").replace("NOK", "").strip()
+        
+        # Handle negative values properly
+        is_negative = result_str.startswith('-')
+        result_clean = result_str.lstrip('-')
+        
+        if not result_clean.isdigit():
+            raise ValueError(f"Invalid result format: {result_str}")
+        
+        result_int = int(result_clean) * 1000  # Convert from thousands
+        if is_negative:
+            result_int = -result_int
+            
         if result_int < 0:
             health[PROFITABILITY_CONCERN] = (
-                "Company is not currently profitable."
+                f"Company is not currently profitable ({result_int/1000000:.1f}M NOK loss)."
             )
 
     except (ValueError, TypeError) as e:
@@ -526,8 +550,14 @@ def get_custom_fields(config: configparser.ConfigParser) -> Optional[Dict[str, A
         response.raise_for_status()
         result = response.json()
         if result.get('Success'):
-            custom_fields = result.get('Result', [])
-            logging.info(f"Successfully fetched {len(custom_fields)} custom fields.")
+            # API returns fields organized by type: Contact, Company, Pipeline
+            custom_fields = {
+                'Contact': result.get('Contact', []),
+                'Company': result.get('Company', []),
+                'Pipeline': result.get('Pipeline', [])
+            }
+            total_fields = len(custom_fields['Contact']) + len(custom_fields['Company']) + len(custom_fields['Pipeline'])
+            logging.info(f"Successfully fetched {total_fields} custom fields ({len(custom_fields['Company'])} Company, {len(custom_fields['Contact'])} Contact, {len(custom_fields['Pipeline'])} Pipeline).")
             return custom_fields
         else:
             logging.error(f"LACRM API Error: {result.get('Result')}")
@@ -550,45 +580,38 @@ def print_custom_fields_guide(config: configparser.ConfigParser):
     print("Copy the Field IDs below into your config.ini file")
     print("="*80)
     
-    contact_fields = []
-    company_fields = []
-    pipeline_fields = []
-    
-    for field in custom_fields:
-        field_id = field.get('FieldId', 'N/A')
-        field_name = field.get('Name', 'Unknown')
-        field_type = field.get('Type', 'Unknown')
-        applies_to = field.get('AppliesTo', 'Unknown')
-        
-        field_info = f"{field_name:<30} | ID: {field_id:<15} | Type: {field_type}"
-        
-        if applies_to == 'Contact':
-            contact_fields.append(field_info)
-        elif applies_to == 'Company':
-            company_fields.append(field_info)
-        elif applies_to == 'Pipeline':
-            pipeline_fields.append(field_info)
-    
-    if contact_fields:
+    # Process Contact fields
+    if custom_fields.get('Contact'):
         print("\n🏢 CONTACT CUSTOM FIELDS:")
         print("-" * 80)
-        for field in contact_fields:
-            print(f"  {field}")
+        for field in custom_fields['Contact']:
+            field_id = field.get('CustomFieldId', 'N/A')
+            field_name = field.get('Name', 'Unknown')
+            field_type = field.get('Type', 'Unknown')
+            print(f"  {field_name:<30} | ID: {field_id} | Type: {field_type}")
     
-    if company_fields:
-        print("\n🏭 COMPANY CUSTOM FIELDS:")
+    # Process Company fields  
+    if custom_fields.get('Company'):
+        print("\n� COMPANY CUSTOM FIELDS:")
         print("-" * 80)
-        for field in company_fields:
-            print(f"  {field}")
+        for field in custom_fields['Company']:
+            field_id = field.get('CustomFieldId', 'N/A')
+            field_name = field.get('Name', 'Unknown')
+            field_type = field.get('Type', 'Unknown')
+            print(f"  {field_name:<30} | ID: {field_id} | Type: {field_type}")
         
-        print("\n📝 For Company fields, add these to [LACRM_CUSTOM_FIELDS] section:")
+        print("\n📝 For Company fields, add these to config.ini:")
         print("   Example: brreg_navn = FIELD_ID_NUMBER")
     
-    if pipeline_fields:
+    # Process Pipeline fields
+    if custom_fields.get('Pipeline'):
         print("\n📊 PIPELINE CUSTOM FIELDS:")
         print("-" * 80)
-        for field in pipeline_fields:
-            print(f"  {field}")
+        for field in custom_fields['Pipeline']:
+            field_id = field.get('CustomFieldId', 'N/A')
+            field_name = field.get('Name', 'Unknown')
+            field_type = field.get('Type', 'Unknown')
+            print(f"  {field_name:<30} | ID: {field_id} | Type: {field_type}")
     
     print("\n" + "="*80)
     print("💡 TIP: Look for field names matching these categories:")
@@ -601,12 +624,13 @@ def print_custom_fields_guide(config: configparser.ConfigParser):
 def get_lacrm_contacts(
     config: configparser.ConfigParser
 ) -> Optional[List[Dict[str, Any]]]:
-    """Fetches all contacts from LACRM."""
+    """Fetches all contacts from LACRM using SearchContacts."""
     logging.info("Fetching all contacts from LACRM...")
     data = {
         "UserCode": config['LACRM']['UserCode'],
         "APIToken": config['LACRM']['APIToken'],
-        "Function": "GetContacts",
+        "Function": "SearchContacts",
+        "Parameters": json.dumps({"SearchText": ""})  # Empty search returns all contacts
     }
     try:
         response = requests.post(LACRM_API_URL, data=data, timeout=30)
@@ -622,6 +646,30 @@ def get_lacrm_contacts(
     except requests.exceptions.RequestException as e:
         logging.error(f"Error connecting to LACRM API: {e}")
         return None
+
+
+def get_lacrm_companies(
+    config: configparser.ConfigParser
+) -> Optional[List[Dict[str, Any]]]:
+    """Fetches company records from LACRM using SearchContacts with IsCompany=1 filter."""
+    logging.info("Fetching company records from LACRM...")
+    
+    # First get all contacts
+    all_contacts = get_lacrm_contacts(config)
+    if not all_contacts:
+        return None
+    
+    # Filter for company records and contacts with company names
+    companies = []
+    for contact in all_contacts:
+        is_company_record = contact.get('IsCompany') == "1"
+        has_company_name = bool(contact.get('CompanyName'))
+        
+        if is_company_record or has_company_name:
+            companies.append(contact)
+    
+    logging.info(f"Found {len(companies)} company-related records out of {len(all_contacts)} total contacts.")
+    return companies
 
 
 def get_or_create_pipeline(config: configparser.ConfigParser) -> Optional[str]:
@@ -811,11 +859,17 @@ def enrich_with_urls(orgnr: str) -> Dict[str, str]:
 def scrape_proff(orgnr: str) -> Optional[Dict[str, Any]]:
     """
     Scrapes key financial and company data from Proff.no.
+    Updated for the new Proff.no site structure (2025).
     """
     try:
         url = PROFF_URL.format(orgnr=orgnr)
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'no,en;q=0.5',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
         }
         
         response = requests.get(url, headers=headers, timeout=15)
@@ -827,44 +881,94 @@ def scrape_proff(orgnr: str) -> Optional[Dict[str, Any]]:
         
         proff_data = {
             'url': url,
-            'key_figures': 'No key figures available',
+            'key_figures': {},
             'company_description': '',
             'contact_info': {}
         }
         
-        # Try to extract key figures
-        key_figures_section = soup.find('div', class_='key-figures') or soup.find('table', class_='table-key-figures')
-        if key_figures_section:
+        # Extract financial data from the new structure
+        # Look for the accounting table with class "AccountFiguresWidget-accountingtable"
+        financial_table = soup.find('table', class_='AccountFiguresWidget-accountingtable')
+        if financial_table:
             figures = {}
-            for row in key_figures_section.find_all('tr'):
-                cells = row.find_all(['td', 'th'])
+            rows = financial_table.find_all('tr')
+            for row in rows:
+                cells = row.find_all(['th', 'td'])
                 if len(cells) >= 2:
-                    key = cells[0].get_text(strip=True)
-                    value = cells[1].get_text(strip=True)
-                    if key and value:
-                        figures[key] = value
+                    key_elem = cells[0]
+                    value_elem = cells[1]
+                    
+                    # Skip header rows
+                    if key_elem.name == 'th' and value_elem.name == 'th':
+                        continue
+                    
+                    key = key_elem.get_text(strip=True)
+                    value = value_elem.get_text(strip=True)
+                    
+                    # Filter out non-financial entries
+                    if key and value and key not in ['Regnskap', 'Valuta']:
+                        # Clean up the value (remove NOK, convert negative signs)
+                        cleaned_value = value.replace('NOK', '').replace('−', '-').strip()
+                        figures[key] = cleaned_value
+            
             if figures:
                 proff_data['key_figures'] = figures
         
-        # Try to extract company description
-        description_section = soup.find('div', class_='company-description') or soup.find('p', class_='description')
-        if description_section:
-            proff_data['company_description'] = description_section.get_text(strip=True)
+        # Also try to extract from StatsWidget cells (summary stats at top)
+        stats_widgets = soup.find_all('div', class_='StatsWidget-cell')
+        if stats_widgets and not proff_data['key_figures']:
+            figures = {}
+            for widget in stats_widgets:
+                header_elem = widget.find('span', class_='StatsWidget-header')
+                value_elem = widget.find('span', class_='StatsWidget-value')
+                
+                if header_elem and value_elem:
+                    key = header_elem.get_text(strip=True)
+                    value = value_elem.get_text(strip=True)
+                    
+                    # Only keep financial figures, skip company form etc.
+                    if any(term in key.lower() for term in ['inntekt', 'resultat', 'ebitda', 'omsetning']):
+                        # Clean up the value
+                        cleaned_value = value.replace('NOK', '').replace('−', '-').strip()
+                        figures[key] = cleaned_value
+            
+            if figures:
+                proff_data['key_figures'] = figures
+        
+        # Extract company description from meta description
+        meta_desc = soup.find('meta', attrs={'name': 'description'})
+        if meta_desc:
+            proff_data['company_description'] = meta_desc.get('content', '')
         
         # Try to extract contact information
-        contact_section = soup.find('div', class_='contact-info')
-        if contact_section:
-            contact_info = {}
-            for item in contact_section.find_all(['div', 'p', 'span']):
-                text = item.get_text(strip=True)
-                if '@' in text:
-                    contact_info['email'] = text
-                elif text.startswith('+') or text.replace(' ', '').isdigit():
-                    contact_info['phone'] = text
-            proff_data['contact_info'] = contact_info
+        # Look for contact info in various possible locations
+        contact_info = {}
         
-        logging.info(f"Successfully scraped Proff.no data for {orgnr}")
-        return proff_data
+        # Look for phone, email, etc. in the text content
+        page_text = soup.get_text()
+        
+        # Simple email extraction
+        import re
+        email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+        emails = re.findall(email_pattern, page_text)
+        if emails:
+            contact_info['email'] = emails[0]  # Take the first email found
+        
+        # Simple phone extraction (Norwegian format)
+        phone_pattern = r'(?:\+47\s?)?(?:\d{2}\s?\d{2}\s?\d{2}\s?\d{2}|\d{8})'
+        phones = re.findall(phone_pattern, page_text)
+        if phones:
+            contact_info['phone'] = phones[0]
+        
+        proff_data['contact_info'] = contact_info
+        
+        # If we got some data, consider it successful
+        if proff_data['key_figures'] or proff_data['company_description']:
+            logging.info(f"Successfully scraped Proff.no data for {orgnr}")
+            return proff_data
+        else:
+            logging.warning(f"No meaningful data extracted from Proff.no for {orgnr}")
+            return None
         
     except Exception as e:
         logging.error(f"Failed to scrape Proff.no for {orgnr}: {e}")
@@ -880,14 +984,17 @@ def update_lacrm_contact(contact_id: str, payload: Dict[str, Any], config: confi
         return True
     
     try:
+        # LACRM API expects custom fields directly in parameters, not nested under CustomFields
+        parameters = {
+            "ContactId": contact_id,
+            **payload  # Spread custom fields directly into parameters
+        }
+        
         data = {
             "UserCode": config['LACRM']['UserCode'],
             "APIToken": config['LACRM']['APIToken'],
             "Function": "EditContact",
-            "Parameters": json.dumps({
-                "ContactId": contact_id,
-                "CustomFields": payload
-            })
+            "Parameters": json.dumps(parameters)
         }
         
         response = requests.post(LACRM_API_URL, data=data, timeout=15)
@@ -1153,22 +1260,35 @@ def process_single_orgnr(orgnr: str, args: argparse.Namespace) -> Optional[Dict[
 def sync_all_lacrm_contacts(
     config: configparser.ConfigParser, args: argparse.Namespace
 ):
-    """Fetches all LACRM contacts and processes them."""
-    contacts = get_lacrm_contacts(config)
-    if not contacts:
+    """Fetches all LACRM contacts and processes company records."""
+    # Get company-related records (both IsCompany=1 and contacts with CompanyName)
+    companies = get_lacrm_companies(config)
+    if not companies:
+        logging.error("No company records found in LACRM.")
         return
 
     orgnr_field_id = config['LACRM']['OrgNrFieldId']
     
     # Progress bar setup
-    pbar = tqdm(contacts, desc="Syncing LACRM Contacts")
+    pbar = tqdm(companies, desc="Syncing LACRM Companies")
 
     for contact in pbar:
-        if not isinstance(contact, dict) or not contact.get('CompanyName'):
+        if not isinstance(contact, dict):
             continue
 
         contact_id = contact.get('ContactId')
-        company_name = contact.get('CompanyName')
+        is_company_record = contact.get('IsCompany') == "1"
+        
+        # Determine company name
+        if is_company_record:
+            # For company records, use FirstName as company name if CompanyName is empty
+            company_name = (contact.get('CompanyName') or 
+                          contact.get('FirstName') or 
+                          'Unknown Company')
+        else:
+            # For individual contacts, use CompanyName
+            company_name = contact.get('CompanyName')
+            
         if not contact_id or not company_name:
             continue
         

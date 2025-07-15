@@ -1,0 +1,86 @@
+{
+    "organisasjonsnummer": "918124306",
+    "navn": "TROLLHAGEN TINGSRETTSLIGE SAMEIE",
+    "organisasjonsform": {
+        "kode": "SAM",
+        "beskrivelse": "Tingsrettslig sameie",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/SAM"
+            }
+        }
+    },
+    "postadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "4068",
+        "poststed": "STAVANGER",
+        "adresse": [
+            "c/o Hinna Park Fac. Management",
+            "Postboks 130"
+        ],
+        "kommune": "STAVANGER",
+        "kommunenummer": "1103"
+    },
+    "registreringsdatoEnhetsregisteret": "2016-12-06",
+    "registrertIMvaregisteret": false,
+    "harRegistrertAntallAnsatte": false,
+    "epostadresse": "tore@svgproperty.no",
+    "mobil": "482 63 456",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "4020",
+        "poststed": "STAVANGER",
+        "adresse": [
+            "c/o Hinna Park Facility",
+            "Management AS",
+            "Jåttåvågveien 18"
+        ],
+        "kommune": "STAVANGER",
+        "kommunenummer": "1103"
+    },
+    "stiftelsesdato": "2016-10-21",
+    "registrertIForetaksregisteret": false,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "aktivitet": [
+        "Sameiet omfatter gnr. 16 bnr. 1465 i Stavanger kommune."
+    ],
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/918124306"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {
+        "url": "https://www.proff.no/company/918124306",
+        "key_figures": {},
+        "company_description": "Se selskapsinformasjon for Trollhagen Tingsrettslige Sameie. Oversikt med kontaktinfo, regnskapstall, ledelse, styre, eiere og kunngjøringer.",
+        "contact_info": {}
+    },
+    "financial_health": {
+        "Revenue Concern": "Low revenue (0.0M NOK)."
+    },
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-15T07:53:53.103244+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-15T07:53:53.103254+00:00"
+    },
+    "_timestamp": "2025-07-15T07:53:53.103301+00:00"
+}

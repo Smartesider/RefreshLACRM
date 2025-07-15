@@ -1,0 +1,95 @@
+{
+    "organisasjonsnummer": "998453429",
+    "navn": "HJERTEVEIEN",
+    "organisasjonsform": {
+        "kode": "FLI",
+        "beskrivelse": "Forening/lag/innretning",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/FLI"
+            }
+        }
+    },
+    "hjemmeside": "https://www.hjerteveien.com",
+    "registreringsdatoEnhetsregisteret": "2012-06-26",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+        "kode": "94.991",
+        "beskrivelse": "Aktiviteter i andre interesseorganisasjoner ikke nevnt annet sted"
+    },
+    "harRegistrertAntallAnsatte": false,
+    "epostadresse": "monica.rasch@yahoo.no",
+    "mobil": "451 17 588",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "1512",
+        "poststed": "MOSS",
+        "adresse": [
+            "Ole O. Lians gate 56"
+        ],
+        "kommune": "MOSS",
+        "kommunenummer": "3103"
+    },
+    "stiftelsesdato": "2012-06-04",
+    "institusjonellSektorkode": {
+        "kode": "7000",
+        "beskrivelse": "Ideelle organisasjoner"
+    },
+    "registrertIForetaksregisteret": false,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "aktivitet": [
+        "Fange opp mennesker som har opplevd svikt i hjelpeapparatet. Være",
+        "deres stemme i samfunnet. Fremme helse og vekst i den enkeltes liv og",
+        "i samfunnet for øvrig."
+    ],
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/998453429"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {
+        "url": "https://www.proff.no/company/998453429",
+        "key_figures": {},
+        "company_description": "Se selskapsinformasjon for Hjerteveien. Oversikt med kontaktinfo, regnskapstall, ledelse, styre, eiere og kunngjøringer.",
+        "contact_info": {}
+    },
+    "financial_health": {
+        "Revenue Concern": "Low revenue (0.0M NOK)."
+    },
+    "domain_health": {
+        "error": "Invalid domain format."
+    },
+    "tech_stack": {},
+    "ai_analysis": {
+        "error": "OpenAI client not configured."
+    },
+    "social_media_presence": {
+        "linkedin.com": "Search simulation - further implementation needed.",
+        "facebook.com": "Search simulation - further implementation needed.",
+        "instagram.com": "Search simulation - further implementation needed."
+    },
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-15T07:53:53.569033+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-15T07:53:53.569043+00:00"
+    },
+    "_timestamp": "2025-07-15T07:53:53.569086+00:00"
+}

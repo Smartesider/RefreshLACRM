@@ -1,0 +1,106 @@
+{
+    "organisasjonsnummer": "913327683",
+    "navn": "VESTBY OG SON TRAFIKKSKOLE AS",
+    "organisasjonsform": {
+        "kode": "AS",
+        "beskrivelse": "Aksjeselskap",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/AS"
+            }
+        }
+    },
+    "postadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "1541",
+        "poststed": "VESTBY",
+        "adresse": [
+            "Postboks 88"
+        ],
+        "kommune": "VESTBY",
+        "kommunenummer": "3216"
+    },
+    "registreringsdatoEnhetsregisteret": "2014-03-10",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+        "kode": "85.530",
+        "beskrivelse": "Trafikkskoleundervisning"
+    },
+    "harRegistrertAntallAnsatte": true,
+    "registreringsdatoAntallAnsatteEnhetsregisteret": "2019-12-12",
+    "registreringsdatoAntallAnsatteNAVAaregisteret": "2019-12-10",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "1543",
+        "poststed": "VESTBY",
+        "adresse": [
+            "Vestbyveien 21"
+        ],
+        "kommune": "VESTBY",
+        "kommunenummer": "3216"
+    },
+    "stiftelsesdato": "2014-02-10",
+    "institusjonellSektorkode": {
+        "kode": "2100",
+        "beskrivelse": "Private aksjeselskaper mv."
+    },
+    "registrertIForetaksregisteret": true,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "sisteInnsendteAarsregnskap": "2024",
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "vedtektsdato": "2014-02-10",
+    "vedtektsfestetFormaal": [
+        "Sjåførskole for bil og motorsykkel og opplæring i sjøvettregler,",
+        "maritime lover og forskrifter og skal gi henholdsvis førerkort for",
+        "bil, motorsykkel, båtførerbevis og kystskippereksamen."
+    ],
+    "aktivitet": [
+        "Undervisning frem til førerkort for bil, motorsykkel, båtførerbevis og",
+        "kystskippereksamen."
+    ],
+    "registreringsdatoForetaksregisteret": "2014-03-10",
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/913327683"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {
+        "url": "https://www.proff.no/company/913327683",
+        "key_figures": {
+            "Sum driftsinntekter": "2 281",
+            "Driftsresultat (EBIT)": "478",
+            "Resultat før skatt": "423",
+            "Årsresultat": "423",
+            "Sum eiendeler": "828"
+        },
+        "company_description": "Se selskapsinformasjon for VESTBY OG SON TRAFIKKSKOLE AS. Oversikt med kontaktinfo, regnskapstall, ledelse, styre, eiere og kunngjøringer.",
+        "contact_info": {}
+    },
+    "financial_health": {
+        "status": "Appears stable based on available data."
+    },
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-15T07:53:54.990847+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-15T07:53:54.990866+00:00"
+    },
+    "_timestamp": "2025-07-15T07:53:54.990942+00:00"
+}

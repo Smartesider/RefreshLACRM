@@ -1,0 +1,124 @@
+{
+    "organisasjonsnummer": "931122541",
+    "navn": "AS HUSSELSKAPET",
+    "organisasjonsform": {
+        "kode": "AS",
+        "beskrivelse": "Aksjeselskap",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/AS"
+            }
+        }
+    },
+    "hjemmeside": "https://www.husselskapet.no",
+    "postadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "1827",
+        "poststed": "HOBØL",
+        "adresse": [
+            "c/o Økonomikontoret AS",
+            "Ringvold Senter"
+        ],
+        "kommune": "INDRE ØSTFOLD",
+        "kommunenummer": "3118"
+    },
+    "registreringsdatoEnhetsregisteret": "1995-02-19",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+        "kode": "68.209",
+        "beskrivelse": "Utleie av egen eller leid fast eiendom ellers"
+    },
+    "harRegistrertAntallAnsatte": false,
+    "epostadresse": "post@husselskapet.no",
+    "telefon": "69 20 65 00",
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "1530",
+        "poststed": "MOSS",
+        "adresse": [
+            "Dronningens gate 27"
+        ],
+        "kommune": "MOSS",
+        "kommunenummer": "3103"
+    },
+    "stiftelsesdato": "1953-07-07",
+    "institusjonellSektorkode": {
+        "kode": "2100",
+        "beskrivelse": "Private aksjeselskaper mv."
+    },
+    "registrertIForetaksregisteret": true,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": true,
+    "sisteInnsendteAarsregnskap": "2023",
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "vedtektsdato": "2023-04-18",
+    "vedtektsfestetFormaal": [
+        "Å skaffe Odd Fellow ordenen i Moss og omegn godt egnede lokaler",
+        "gjennom kjøp, leie eller bygging - samt drift og forvaltning av slik",
+        "eiendom"
+    ],
+    "aktivitet": [
+        "Utleie og drift av eiendommer og selskapets loka-",
+        "ler i 4.etg. i Dronningensg 27 og utnyttelse av",
+        "disse til fordel for Odd Fellow Ordnen i Moss."
+    ],
+    "registreringsdatoForetaksregisteret": "1990-03-18",
+    "registreringsdatoFrivillighetsregisteret": "2017-06-28",
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/931122541"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {
+        "url": "https://www.proff.no/company/931122541",
+        "key_figures": {
+            "Sum driftsinntekter": "1 089",
+            "Driftsresultat (EBIT)": "-421",
+            "Resultat før skatt": "-356",
+            "Årsresultat": "-356",
+            "Sum eiendeler": "3 895"
+        },
+        "company_description": "Se selskapsinformasjon for Husselskapet A/S. Oversikt med kontaktinfo, regnskapstall, ledelse, styre, eiere og kunngjøringer.",
+        "contact_info": {
+            "phone": "69 20 65 00"
+        }
+    },
+    "financial_health": {
+        "Profitability Concern": "Company is not currently profitable (-0.4M NOK loss)."
+    },
+    "domain_health": {
+        "error": "Invalid domain format."
+    },
+    "tech_stack": {},
+    "ai_analysis": {
+        "error": "OpenAI client not configured."
+    },
+    "social_media_presence": {
+        "linkedin.com": "Search simulation - further implementation needed.",
+        "facebook.com": "Search simulation - further implementation needed.",
+        "instagram.com": "Search simulation - further implementation needed."
+    },
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-15T07:53:55.579876+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-15T07:53:55.579885+00:00"
+    },
+    "_timestamp": "2025-07-15T07:53:55.579925+00:00"
+}

@@ -44,3 +44,281 @@
 2025-07-14 17:32:10,932 - INFO - No database connection string. Using file-based cache.
 2025-07-14 17:32:10,932 - INFO - Fetching custom fields from LACRM...
 2025-07-14 17:32:11,560 - ERROR - Error connecting to LACRM API: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/?UserCode=&APIToken=&Function=GetCustomFields
+2025-07-15 09:53:52,061 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 09:53:52,062 - INFO - No database connection string. Using file-based cache.
+2025-07-15 09:53:52,062 - INFO - Fetching company records from LACRM...
+2025-07-15 09:53:52,062 - INFO - Fetching all contacts from LACRM...
+2025-07-15 09:53:52,542 - INFO - Successfully fetched 25 contacts.
+2025-07-15 09:53:52,543 - INFO - Found 5 company-related records out of 25 total contacts.
+2025-07-15 09:53:52,556 - INFO - 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) is missing orgnr. Searching...
+2025-07-15 09:53:52,557 - INFO - Searching for orgnr for company: 'Trollhagen AS'
+2025-07-15 09:53:52,732 - INFO - Found orgnr 918124306 for 'Trollhagen AS'.
+2025-07-15 09:53:52,732 - INFO - [DRY RUN] Would update LACRM contact 4036213232113780142605684247804 with payload: {'4040978325247338748089826771438': '918124306'}
+2025-07-15 09:53:52,732 - INFO - Processing 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) with orgnr: 918124306
+2025-07-15 09:53:52,732 - INFO - Fetching fresh data for 918124306.
+2025-07-15 09:53:52,732 - INFO - Fetching data for orgnr 918124306 from Brreg.
+2025-07-15 09:53:53,102 - INFO - Successfully scraped Proff.no data for 918124306
+2025-07-15 09:53:53,106 - INFO - Successfully enriched and cached data for 918124306.
+2025-07-15 09:53:53,108 - WARNING - 'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.
+2025-07-15 09:53:53,109 - INFO - No new data to sync for contact 4036213232113780142605684247804.
+2025-07-15 09:53:53,109 - INFO - 'Hjerteveien' (ContactId: 4036999435180082702019187357094) is missing orgnr. Searching...
+2025-07-15 09:53:53,109 - INFO - Searching for orgnr for company: 'Hjerteveien'
+2025-07-15 09:53:53,219 - INFO - Found orgnr 998453429 for 'Hjerteveien'.
+2025-07-15 09:53:53,220 - INFO - [DRY RUN] Would update LACRM contact 4036999435180082702019187357094 with payload: {'4040978325247338748089826771438': '998453429'}
+2025-07-15 09:53:53,220 - INFO - Processing 'Hjerteveien' (ContactId: 4036999435180082702019187357094) with orgnr: 998453429
+2025-07-15 09:53:53,221 - INFO - Fetching fresh data for 998453429.
+2025-07-15 09:53:53,221 - INFO - Fetching data for orgnr 998453429 from Brreg.
+2025-07-15 09:53:53,568 - INFO - Successfully scraped Proff.no data for 998453429
+2025-07-15 09:53:53,569 - INFO - Successfully enriched and cached data for 998453429.
+2025-07-15 09:53:53,569 - WARNING - 'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.
+2025-07-15 09:53:53,570 - INFO - No new data to sync for contact 4036999435180082702019187357094.
+2025-07-15 09:53:53,570 - INFO - 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) is missing orgnr. Searching...
+2025-07-15 09:53:53,570 - INFO - Searching for orgnr for company: 'GJS Trafikkskole AS'
+2025-07-15 09:53:53,760 - INFO - Found orgnr 825051872 for 'GJS Trafikkskole AS'.
+2025-07-15 09:53:53,760 - INFO - [DRY RUN] Would update LACRM contact 4036213231309040932390104876512 with payload: {'4040978325247338748089826771438': '825051872'}
+2025-07-15 09:53:53,761 - INFO - Processing 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) with orgnr: 825051872
+2025-07-15 09:53:53,761 - INFO - Fetching fresh data for 825051872.
+2025-07-15 09:53:53,761 - INFO - Fetching data for orgnr 825051872 from Brreg.
+2025-07-15 09:53:54,237 - INFO - Successfully scraped Proff.no data for 825051872
+2025-07-15 09:53:54,238 - INFO - Successfully enriched and cached data for 825051872.
+2025-07-15 09:53:54,239 - WARNING - 'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.
+2025-07-15 09:53:54,240 - INFO - No new data to sync for contact 4036213231309040932390104876512.
+2025-07-15 09:53:54,241 - INFO - 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) is missing orgnr. Searching...
+2025-07-15 09:53:54,241 - INFO - Searching for orgnr for company: 'GJS Trafikkskole i Moss og Vestby'
+2025-07-15 09:53:54,370 - INFO - Found orgnr 913327683 for 'GJS Trafikkskole i Moss og Vestby'.
+2025-07-15 09:53:54,370 - INFO - [DRY RUN] Would update LACRM contact 4036213231281370816279539372491 with payload: {'4040978325247338748089826771438': '913327683'}
+2025-07-15 09:53:54,370 - INFO - Processing 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) with orgnr: 913327683
+2025-07-15 09:53:54,370 - INFO - Fetching fresh data for 913327683.
+2025-07-15 09:53:54,370 - INFO - Fetching data for orgnr 913327683 from Brreg.
+2025-07-15 09:53:54,990 - INFO - Successfully scraped Proff.no data for 913327683
+2025-07-15 09:53:54,991 - INFO - Successfully enriched and cached data for 913327683.
+2025-07-15 09:53:54,992 - WARNING - 'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.
+2025-07-15 09:53:54,992 - INFO - No new data to sync for contact 4036213231281370816279539372491.
+2025-07-15 09:53:54,993 - INFO - 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) is missing orgnr. Searching...
+2025-07-15 09:53:54,993 - INFO - Searching for orgnr for company: 'AS Husselskapet'
+2025-07-15 09:53:55,156 - INFO - Found orgnr 931122541 for 'AS Husselskapet'.
+2025-07-15 09:53:55,157 - INFO - [DRY RUN] Would update LACRM contact 4036553945971743693993248905224 with payload: {'4040978325247338748089826771438': '931122541'}
+2025-07-15 09:53:55,158 - INFO - Processing 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) with orgnr: 931122541
+2025-07-15 09:53:55,158 - INFO - Fetching fresh data for 931122541.
+2025-07-15 09:53:55,158 - INFO - Fetching data for orgnr 931122541 from Brreg.
+2025-07-15 09:53:55,579 - INFO - Successfully scraped Proff.no data for 931122541
+2025-07-15 09:53:55,580 - INFO - Successfully enriched and cached data for 931122541.
+2025-07-15 09:53:55,580 - WARNING - 'LACRM_CUSTOM_FIELDS' section not in config. Cannot map fields.
+2025-07-15 09:53:55,580 - INFO - No new data to sync for contact 4036553945971743693993248905224.
+2025-07-15 09:55:05,165 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 09:55:05,166 - INFO - No database connection string. Using file-based cache.
+2025-07-15 09:55:05,166 - INFO - Fetching custom fields from LACRM...
+2025-07-15 09:55:05,580 - INFO - Successfully fetched 0 custom fields.
+2025-07-15 10:00:15,048 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 10:00:15,049 - INFO - No database connection string. Using file-based cache.
+2025-07-15 10:00:15,049 - INFO - Fetching custom fields from LACRM...
+2025-07-15 10:00:15,522 - INFO - Successfully fetched 39 custom fields (12 Company, 0 Contact, 27 Pipeline).
+2025-07-15 10:00:55,845 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 10:00:55,845 - INFO - No database connection string. Using file-based cache.
+2025-07-15 10:00:55,845 - INFO - Fetching company records from LACRM...
+2025-07-15 10:00:55,845 - INFO - Fetching all contacts from LACRM...
+2025-07-15 10:00:55,846 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:00:56,279 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:00:56,280 - INFO - Successfully fetched 25 contacts.
+2025-07-15 10:00:56,280 - INFO - Found 5 company-related records out of 25 total contacts.
+2025-07-15 10:00:56,286 - DEBUG - Skipping 'Trollhagen AS' as it has no valid orgnr.
+2025-07-15 10:00:56,286 - DEBUG - Skipping 'Hjerteveien' as it has no valid orgnr.
+2025-07-15 10:00:56,287 - DEBUG - Skipping 'GJS Trafikkskole AS' as it has no valid orgnr.
+2025-07-15 10:00:56,287 - DEBUG - Skipping 'GJS Trafikkskole i Moss og Vestby' as it has no valid orgnr.
+2025-07-15 10:00:56,287 - DEBUG - Skipping 'AS Husselskapet' as it has no valid orgnr.
+2025-07-15 10:02:57,489 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 10:02:57,489 - INFO - No database connection string. Using file-based cache.
+2025-07-15 10:02:57,489 - INFO - Fetching company records from LACRM...
+2025-07-15 10:02:57,489 - INFO - Fetching all contacts from LACRM...
+2025-07-15 10:02:57,490 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:02:57,938 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:02:57,939 - INFO - Successfully fetched 25 contacts.
+2025-07-15 10:02:57,940 - INFO - Found 5 company-related records out of 25 total contacts.
+2025-07-15 10:02:57,950 - INFO - 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) is missing orgnr. Searching...
+2025-07-15 10:02:57,951 - INFO - Searching for orgnr for company: 'Trollhagen AS'
+2025-07-15 10:02:57,952 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:02:58,110 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=Trollhagen+AS&size=1 HTTP/1.1" 200 None
+2025-07-15 10:02:58,111 - INFO - Found orgnr 918124306 for 'Trollhagen AS'.
+2025-07-15 10:02:58,111 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:02:58,562 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:02:58,564 - ERROR - Failed to update LACRM contact 4036213232113780142605684247804: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:02:58,565 - INFO - Processing 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) with orgnr: 918124306
+2025-07-15 10:02:58,582 - INFO - Using cached data for 918124306.
+2025-07-15 10:02:58,586 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:02:58,587 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:02:58,994 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:02:58,995 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:02:58,995 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:02:58,996 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:02:59,415 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:02:59,416 - ERROR - Failed to update LACRM contact 4036213232113780142605684247804: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:02:59,417 - INFO - 'Hjerteveien' (ContactId: 4036999435180082702019187357094) is missing orgnr. Searching...
+2025-07-15 10:02:59,418 - INFO - Searching for orgnr for company: 'Hjerteveien'
+2025-07-15 10:02:59,418 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:02:59,528 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=Hjerteveien&size=1 HTTP/1.1" 200 None
+2025-07-15 10:02:59,529 - INFO - Found orgnr 998453429 for 'Hjerteveien'.
+2025-07-15 10:02:59,530 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:00,053 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:00,053 - ERROR - Failed to update LACRM contact 4036999435180082702019187357094: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:00,054 - INFO - Processing 'Hjerteveien' (ContactId: 4036999435180082702019187357094) with orgnr: 998453429
+2025-07-15 10:03:00,065 - INFO - Using cached data for 998453429.
+2025-07-15 10:03:00,065 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:03:00,066 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:00,476 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:00,476 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:00,477 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:03:00,478 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:01,213 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:01,213 - ERROR - Failed to update LACRM contact 4036999435180082702019187357094: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:01,214 - INFO - 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) is missing orgnr. Searching...
+2025-07-15 10:03:01,214 - INFO - Searching for orgnr for company: 'GJS Trafikkskole AS'
+2025-07-15 10:03:01,215 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:03:01,394 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=GJS+Trafikkskole+AS&size=1 HTTP/1.1" 200 None
+2025-07-15 10:03:01,395 - INFO - Found orgnr 825051872 for 'GJS Trafikkskole AS'.
+2025-07-15 10:03:01,395 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:01,817 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:01,818 - ERROR - Failed to update LACRM contact 4036213231309040932390104876512: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:01,818 - INFO - Processing 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) with orgnr: 825051872
+2025-07-15 10:03:01,829 - INFO - Using cached data for 825051872.
+2025-07-15 10:03:01,829 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:03:01,830 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:02,223 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:02,223 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:02,224 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:03:02,225 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:02,644 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:02,644 - ERROR - Failed to update LACRM contact 4036213231309040932390104876512: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:02,645 - INFO - 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) is missing orgnr. Searching...
+2025-07-15 10:03:02,645 - INFO - Searching for orgnr for company: 'GJS Trafikkskole i Moss og Vestby'
+2025-07-15 10:03:02,646 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:03:02,767 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=GJS+Trafikkskole+i+Moss+og+Vestby&size=1 HTTP/1.1" 200 None
+2025-07-15 10:03:02,768 - INFO - Found orgnr 913327683 for 'GJS Trafikkskole i Moss og Vestby'.
+2025-07-15 10:03:02,769 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:03,506 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:03,507 - ERROR - Failed to update LACRM contact 4036213231281370816279539372491: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:03,507 - INFO - Processing 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) with orgnr: 913327683
+2025-07-15 10:03:03,518 - INFO - Using cached data for 913327683.
+2025-07-15 10:03:03,518 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:03:03,519 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:04,263 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:04,264 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:04,265 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:03:04,267 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:04,673 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:04,673 - ERROR - Failed to update LACRM contact 4036213231281370816279539372491: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:04,674 - INFO - 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) is missing orgnr. Searching...
+2025-07-15 10:03:04,674 - INFO - Searching for orgnr for company: 'AS Husselskapet'
+2025-07-15 10:03:04,675 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:03:04,837 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=AS+Husselskapet&size=1 HTTP/1.1" 200 None
+2025-07-15 10:03:04,837 - INFO - Found orgnr 931122541 for 'AS Husselskapet'.
+2025-07-15 10:03:04,838 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:05,283 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:05,284 - ERROR - Failed to update LACRM contact 4036553945971743693993248905224: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:05,285 - INFO - Processing 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) with orgnr: 931122541
+2025-07-15 10:03:05,293 - INFO - Using cached data for 931122541.
+2025-07-15 10:03:05,294 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:03:05,294 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:05,700 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:05,701 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:03:05,701 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:03:05,702 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:03:06,104 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:03:06,105 - ERROR - Failed to update LACRM contact 4036553945971743693993248905224: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:23,702 - WARNING - OpenAI API key not found in config. AI features disabled.
+2025-07-15 10:09:23,702 - INFO - No database connection string. Using file-based cache.
+2025-07-15 10:09:23,702 - INFO - Fetching company records from LACRM...
+2025-07-15 10:09:23,702 - INFO - Fetching all contacts from LACRM...
+2025-07-15 10:09:23,703 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:24,170 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:24,173 - INFO - Successfully fetched 25 contacts.
+2025-07-15 10:09:24,174 - INFO - Found 5 company-related records out of 25 total contacts.
+2025-07-15 10:09:24,180 - INFO - 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) is missing orgnr. Searching...
+2025-07-15 10:09:24,180 - INFO - Searching for orgnr for company: 'Trollhagen AS'
+2025-07-15 10:09:24,181 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:09:24,335 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=Trollhagen+AS&size=1 HTTP/1.1" 200 None
+2025-07-15 10:09:24,336 - INFO - Found orgnr 918124306 for 'Trollhagen AS'.
+2025-07-15 10:09:24,337 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:25,054 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:25,055 - INFO - Successfully updated LACRM contact 4036213232113780142605684247804
+2025-07-15 10:09:25,055 - INFO - Processing 'Trollhagen AS' (ContactId: 4036213232113780142605684247804) with orgnr: 918124306
+2025-07-15 10:09:25,055 - INFO - Using cached data for 918124306.
+2025-07-15 10:09:25,058 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:09:25,059 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:25,464 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:09:25,465 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:25,465 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:09:25,466 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:26,163 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:26,164 - INFO - Successfully updated LACRM contact 4036213232113780142605684247804
+2025-07-15 10:09:26,165 - INFO - 'Hjerteveien' (ContactId: 4036999435180082702019187357094) is missing orgnr. Searching...
+2025-07-15 10:09:26,165 - INFO - Searching for orgnr for company: 'Hjerteveien'
+2025-07-15 10:09:26,168 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:09:26,281 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=Hjerteveien&size=1 HTTP/1.1" 200 None
+2025-07-15 10:09:26,282 - INFO - Found orgnr 998453429 for 'Hjerteveien'.
+2025-07-15 10:09:26,283 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:26,985 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:26,986 - INFO - Successfully updated LACRM contact 4036999435180082702019187357094
+2025-07-15 10:09:26,986 - INFO - Processing 'Hjerteveien' (ContactId: 4036999435180082702019187357094) with orgnr: 998453429
+2025-07-15 10:09:26,987 - INFO - Using cached data for 998453429.
+2025-07-15 10:09:26,987 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:09:26,987 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:27,397 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:09:27,398 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:27,398 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:09:27,399 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:28,054 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:28,055 - INFO - Successfully updated LACRM contact 4036999435180082702019187357094
+2025-07-15 10:09:28,055 - INFO - 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) is missing orgnr. Searching...
+2025-07-15 10:09:28,055 - INFO - Searching for orgnr for company: 'GJS Trafikkskole AS'
+2025-07-15 10:09:28,056 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:09:28,227 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=GJS+Trafikkskole+AS&size=1 HTTP/1.1" 200 None
+2025-07-15 10:09:28,228 - INFO - Found orgnr 825051872 for 'GJS Trafikkskole AS'.
+2025-07-15 10:09:28,229 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:28,885 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:28,885 - INFO - Successfully updated LACRM contact 4036213231309040932390104876512
+2025-07-15 10:09:28,886 - INFO - Processing 'GJS Trafikkskole AS' (ContactId: 4036213231309040932390104876512) with orgnr: 825051872
+2025-07-15 10:09:28,886 - INFO - Using cached data for 825051872.
+2025-07-15 10:09:28,886 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:09:28,887 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:29,316 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:09:29,316 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:29,316 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:09:29,318 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:29,976 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:29,977 - INFO - Successfully updated LACRM contact 4036213231309040932390104876512
+2025-07-15 10:09:29,978 - INFO - 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) is missing orgnr. Searching...
+2025-07-15 10:09:29,978 - INFO - Searching for orgnr for company: 'GJS Trafikkskole i Moss og Vestby'
+2025-07-15 10:09:29,979 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:09:30,101 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=GJS+Trafikkskole+i+Moss+og+Vestby&size=1 HTTP/1.1" 200 None
+2025-07-15 10:09:30,102 - INFO - Found orgnr 913327683 for 'GJS Trafikkskole i Moss og Vestby'.
+2025-07-15 10:09:30,103 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:30,783 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:30,783 - INFO - Successfully updated LACRM contact 4036213231281370816279539372491
+2025-07-15 10:09:30,784 - INFO - Processing 'GJS Trafikkskole i Moss og Vestby' (ContactId: 4036213231281370816279539372491) with orgnr: 913327683
+2025-07-15 10:09:30,784 - INFO - Using cached data for 913327683.
+2025-07-15 10:09:30,784 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:09:30,785 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:31,206 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:09:31,206 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:31,207 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:09:31,207 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:31,899 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:31,900 - INFO - Successfully updated LACRM contact 4036213231281370816279539372491
+2025-07-15 10:09:31,901 - INFO - 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) is missing orgnr. Searching...
+2025-07-15 10:09:31,901 - INFO - Searching for orgnr for company: 'AS Husselskapet'
+2025-07-15 10:09:31,903 - DEBUG - Starting new HTTPS connection (1): data.brreg.no:443
+2025-07-15 10:09:32,069 - DEBUG - https://data.brreg.no:443 "GET /enhetsregisteret/api/enheter?navn=AS+Husselskapet&size=1 HTTP/1.1" 200 None
+2025-07-15 10:09:32,073 - INFO - Found orgnr 931122541 for 'AS Husselskapet'.
+2025-07-15 10:09:32,074 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:32,784 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:32,784 - INFO - Successfully updated LACRM contact 4036553945971743693993248905224
+2025-07-15 10:09:32,785 - INFO - Processing 'AS Husselskapet' (ContactId: 4036553945971743693993248905224) with orgnr: 931122541
+2025-07-15 10:09:32,786 - INFO - Using cached data for 931122541.
+2025-07-15 10:09:32,786 - INFO - Getting or creating pipeline: Potensielle kunder
+2025-07-15 10:09:32,786 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:33,193 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 400 None
+2025-07-15 10:09:33,195 - ERROR - Error managing pipeline: 400 Client Error: Bad Request for url: https://api.lessannoyingcrm.com/
+2025-07-15 10:09:33,195 - WARNING - Could not get or create pipeline for recommendations
+2025-07-15 10:09:33,196 - DEBUG - Starting new HTTPS connection (1): api.lessannoyingcrm.com:443
+2025-07-15 10:09:33,904 - DEBUG - https://api.lessannoyingcrm.com:443 "POST / HTTP/1.1" 200 None
+2025-07-15 10:09:33,905 - INFO - Successfully updated LACRM contact 4036553945971743693993248905224

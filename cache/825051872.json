@@ -1,0 +1,92 @@
+{
+    "organisasjonsnummer": "825051872",
+    "navn": "GJS AS",
+    "organisasjonsform": {
+        "kode": "AS",
+        "beskrivelse": "Aksjeselskap",
+        "_links": {
+            "self": {
+                "href": "https://data.brreg.no/enhetsregisteret/api/organisasjonsformer/AS"
+            }
+        }
+    },
+    "registreringsdatoEnhetsregisteret": "2020-05-11",
+    "registrertIMvaregisteret": false,
+    "naeringskode1": {
+        "kode": "00.000",
+        "beskrivelse": "Uoppgitt"
+    },
+    "harRegistrertAntallAnsatte": false,
+    "forretningsadresse": {
+        "land": "Norge",
+        "landkode": "NO",
+        "postnummer": "4015",
+        "poststed": "STAVANGER",
+        "adresse": [
+            "Digranesveien 21"
+        ],
+        "kommune": "STAVANGER",
+        "kommunenummer": "1103"
+    },
+    "stiftelsesdato": "2020-02-24",
+    "institusjonellSektorkode": {
+        "kode": "2100",
+        "beskrivelse": "Private aksjeselskaper mv."
+    },
+    "registrertIForetaksregisteret": true,
+    "registrertIStiftelsesregisteret": false,
+    "registrertIFrivillighetsregisteret": false,
+    "sisteInnsendteAarsregnskap": "2024",
+    "konkurs": false,
+    "underAvvikling": false,
+    "underTvangsavviklingEllerTvangsopplosning": false,
+    "maalform": "Bokmål",
+    "vedtektsdato": "2020-02-24",
+    "vedtektsfestetFormaal": [
+        "Eie aksjer, investering i eiendom samt",
+        "forvaltning av kapital og hva herved står i forbindelse."
+    ],
+    "aktivitet": [
+        "Investeringer i aksje, investering i eiendom samt forvaltning av",
+        "kapital."
+    ],
+    "registreringsdatoForetaksregisteret": "2020-05-11",
+    "registrertIPartiregisteret": false,
+    "paategninger": [],
+    "_links": {
+        "self": {
+            "href": "https://data.brreg.no/enhetsregisteret/api/enheter/825051872"
+        }
+    },
+    "respons_klasse": "Enhet",
+    "urls": {},
+    "proff_data": {
+        "url": "https://www.proff.no/company/825051872",
+        "key_figures": {
+            "Sum driftsinntekter": "-",
+            "Driftsresultat (EBIT)": "-1",
+            "Resultat før skatt": "21",
+            "Årsresultat": "16",
+            "Sum eiendeler": "2 022"
+        },
+        "company_description": "Se selskapsinformasjon for Gjs AS. Oversikt med kontaktinfo, regnskapstall, ledelse, styre, eiere og kunngjøringer.",
+        "contact_info": {}
+    },
+    "financial_health": {
+        "Revenue Concern": "Low revenue (0.0M NOK)."
+    },
+    "fiken_usage": {
+        "uses_fiken": false,
+        "confidence": "low"
+    },
+    "company_news": {
+        "recent_news": [],
+        "last_checked": "2025-07-15T07:53:54.237439+00:00"
+    },
+    "job_openings": {
+        "hiring_status": "Unknown",
+        "recent_roles": [],
+        "last_checked": "2025-07-15T07:53:54.237449+00:00"
+    },
+    "_timestamp": "2025-07-15T07:53:54.237511+00:00"
+}
