@@ -30,19 +30,40 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 from tqdm import tqdm
 try:
-    # Try modern wappalyzer first
-    from wappalyzer import Wappalyzer, WebPage
+    # Try modern python-Wappalyzer package first
+    from python_Wappalyzer import Wappalyzer, WebPage
     WAPPALYZER_AVAILABLE = True
 except ImportError:
     try:
-        # Try alternative import path
-        from wappalyzer.wappalyzer import Wappalyzer
-        from wappalyzer.webpage import WebPage
+        # Try newer wappalyzer package with analyze function
+        import wappalyzer
+        # Create wrapper classes for compatibility
+        class WappalyzerWrapper:
+            @staticmethod
+            def latest():
+                return WappalyzerWrapper()
+            
+            def analyze_with_versions(self, webpage):
+                try:
+                    return wappalyzer.analyze(webpage.url)
+                except Exception:
+                    return {}
+        
+        class WebPageWrapper:
+            def __init__(self, url):
+                self.url = url
+            
+            @classmethod
+            def new_from_url(cls, url):
+                return cls(url)
+        
+        Wappalyzer = WappalyzerWrapper
+        WebPage = WebPageWrapper
         WAPPALYZER_AVAILABLE = True
     except ImportError:
         try:
-            # Try python-Wappalyzer package
-            from python_Wappalyzer import Wappalyzer, WebPage
+            # Try legacy wappalyzer import patterns
+            from wappalyzer import Wappalyzer, WebPage
             WAPPALYZER_AVAILABLE = True
         except ImportError:
             # No Wappalyzer available
@@ -288,11 +309,29 @@ def analyze_job_openings(company_name: str) -> Dict[str, Any]:
         return {"hiring_status": "Error", "error": str(e)}
 
 
+def normalize_url(url: str) -> str:
+    """Normalizes a URL by adding https:// if no scheme is present."""
+    if not url:
+        return url
+    
+    # Remove any whitespace
+    url = url.strip()
+    
+    # If no scheme, add https://
+    if not url.startswith(('http://', 'https://')):
+        url = f'https://{url}'
+    
+    return url
+
+
 def validate_url(url: str) -> bool:
     """Validates if a URL is safe to request."""
     import urllib.parse
     try:
-        parsed = urllib.parse.urlparse(url)
+        # Normalize the URL first
+        normalized_url = normalize_url(url)
+        parsed = urllib.parse.urlparse(normalized_url)
+        
         # Only allow http/https schemes
         if parsed.scheme not in ('http', 'https'):
             return False
@@ -1082,16 +1121,21 @@ def process_single_orgnr(orgnr: str, args: argparse.Namespace) -> Optional[Dict[
             enriched_data['financial_health'] = get_financial_health(proff_scrape_data)
 
         website_url = enriched_data.get('hjemmeside')
-        if website_url and validate_url(website_url):
-            domain = re.sub(r'^https?://', '', website_url).split('/')[0]
-            enriched_data['domain_health'] = check_domain_health(domain)
-            enriched_data['tech_stack'] = detect_tech_stack(website_url)
-            enriched_data['ai_analysis'] = analyze_website_with_ai(website_url)
-            enriched_data['social_media_presence'] = check_social_media_presence(
-                company_name
-            )
-        elif website_url:
-            logging.warning(f"Invalid or unsafe website URL: {website_url}")
+        if website_url:
+            # Normalize the URL (add https:// if missing)
+            normalized_url = normalize_url(website_url)
+            if validate_url(normalized_url):
+                domain = re.sub(r'^https?://', '', normalized_url).split('/')[0]
+                enriched_data['domain_health'] = check_domain_health(domain)
+                enriched_data['tech_stack'] = detect_tech_stack(normalized_url)
+                enriched_data['ai_analysis'] = analyze_website_with_ai(normalized_url)
+                enriched_data['social_media_presence'] = check_social_media_presence(
+                    company_name
+                )
+                # Update the stored URL to the normalized version
+                enriched_data['hjemmeside'] = normalized_url
+            else:
+                logging.warning(f"Invalid or unsafe website URL: {website_url}")
         
         enriched_data['fiken_usage'] = check_fiken_usage(orgnr)
         enriched_data['company_news'] = monitor_company_news(company_name)
