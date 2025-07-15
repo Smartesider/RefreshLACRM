@@ -29,7 +29,27 @@ import whois
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from tqdm import tqdm
-from wappalyzer import Wappalyzer, WebPage
+try:
+    # Try modern wappalyzer first
+    from wappalyzer import Wappalyzer, WebPage
+    WAPPALYZER_AVAILABLE = True
+except ImportError:
+    try:
+        # Try alternative import path
+        from wappalyzer.wappalyzer import Wappalyzer
+        from wappalyzer.webpage import WebPage
+        WAPPALYZER_AVAILABLE = True
+    except ImportError:
+        try:
+            # Try python-Wappalyzer package
+            from python_Wappalyzer import Wappalyzer, WebPage
+            WAPPALYZER_AVAILABLE = True
+        except ImportError:
+            # No Wappalyzer available
+            Wappalyzer = None
+            WebPage = None
+            WAPPALYZER_AVAILABLE = False
+            print("Warning: Wappalyzer not available. Tech stack detection disabled.")
 from whois.parser import PywhoisError
 
 from db import db_conn, setup_database, db_load_from_cache, db_save_to_cache
@@ -398,6 +418,9 @@ def detect_tech_stack(url: str) -> Dict[str, Any]:
     """Detects the technology stack of a website."""
     if not validate_url(url):
         return {"error": "Invalid or unsafe URL provided."}
+    
+    if not WAPPALYZER_AVAILABLE:
+        return {"error": "Wappalyzer not available. Tech stack detection disabled."}
         
     try:
         # Note: Wappalyzer can be slow and resource-intensive

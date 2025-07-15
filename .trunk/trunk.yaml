@@ -1,4 +1,4 @@
-# This file controls the behavior of Trunk: https://docs.trunk.io/cli
+ating the following program# This file controls the behavior of Trunk: https://docs.trunk.io/cli
 # To learn more about the format of this file, see https://docs.trunk.io/reference/trunk-yaml
 version: 0.1
 cli:
@@ -21,10 +21,3 @@ lint:
     - markdownlint@0.45.0
     - prettier@3.6.2
     - trufflehog@3.89.2
-actions:
-  disabled:
-    - trunk-announce
-    - trunk-check-pre-push
-    - trunk-fmt-pre-commit
-  enabled:
-    - trunk-upgrade-available
